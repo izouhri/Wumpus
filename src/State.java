@@ -61,7 +61,4 @@ public class State {
     public void setOr(Coordonnees or) {
         this.or = or;
     }
-
-
-
 }
