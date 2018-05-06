@@ -15,7 +15,6 @@ public class State {
     }
 
     public State () {
-        this.trous = new ArrayList<Coordonnees>();
         this.puits[0] = new Coordonnees(2,2);
         this.puits[1] = new Coordonnees(3,4);
         this.wumpus = new Coordonnees(1,3);
@@ -23,24 +22,41 @@ public class State {
         this.aventurier = new Agent(0,0);
     }
 
-    public Coordonnees getAventurier() {
-        return aventurier;
+    public State(State s)
+    {
+        this.puits = (Coordonnees[])s.getPuits().clone();
+        this.wumpus = new Coordonnees(s.getWumpus());
+        this.or = new Coordonnees(s.getOr());
+        this.aventurier = new Coordonnees(s.getAventurier());
     }
 
     public ArrayList<Coordonnees> getPuits() {
         return puits;
     }
+    
+    public Agent getAventurier() {
+        return aventurier;
+    }
 
-    public Coordonnees getOr() {
-        return or;
+    public void setAventurier(Agent aventurier) {
+        this.aventurier = aventurier;
     }
 
     public Coordonnees getWumpus() {
         return wumpus;
     }
 
-    public void setAventurier(Coordonnees aventurier) {
-        this.aventurier = aventurier;
+    public void setWumpus(Coordonnees wumpus) {
+        this.wumpus = wumpus;
+    }
+
+
+    public ArrayList<Coordonnees> getTrous() {
+        return trous;
+    }
+
+    public Coordonnees getOr() {
+        return or;
     }
 
     public void setOr(Coordonnees or) {
