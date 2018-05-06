@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Random;
 
 public class State {
     private Agent aventurier;
@@ -14,12 +15,32 @@ public class State {
         this.aventurier = aventurier;
     }
 
-    public State () {
-        this.puits[0] = new Coordonnees(2,2);
-        this.puits[1] = new Coordonnees(3,4);
-        this.wumpus = new Coordonnees(1,3);
-        this.or = new Coordonnees(3,3);
-        this.aventurier = new Agent(new Coordonnees(0,0));
+    public State() {
+    	Random r = new Random();
+    	this.aventurier = new Agent(new Coordonnees(r.nextInt(4), r.nextInt(4)));
+    	this.wumpus = new Wumpus(new Coordonnees(r.nextInt(4), r.nextInt(4)));
+    	do
+    	{
+    		this.wumpus.setPosition(new Coordonnees(r.nextInt(4), r.nextInt(4)));
+    	} while(wumpus.isEqual(this.aventurier.getPosition()));
+    	do
+    	{
+    		this.puits[0] = new Coordonnees(r.nextInt(4), r.nextInt(4));
+    	} while(this.puits[0].isEqual(this.aventurier.getPosition())
+    			|| this.puits[0].isEqual(this.wumpus.getPosition()));
+    	do
+    	{
+    		this.puits[1] = new Coordonnees(r.nextInt(4), r.nextInt(4));
+    	} while(this.puits[1].isEqual(this.aventurier.getPosition())
+    			|| this.puits[1].isEqual(this.wumpus.getPosition())
+    			|| this.puits[1].isEqual(this.puits[0]));
+    	do
+    	{
+    		this.or = new Coordonnees(r.nextInt(4), r.nextInt(4));
+    	} while(this.or.isEqual(this.aventurier.getPosition())
+    			|| this.or.isEqual(this.wumpus.getPosition())
+    			|| this.or.isEqual(this.puits[0])
+    			|| this.or.isEqual(this.puits[1]));
     }
 
     public State(State s)

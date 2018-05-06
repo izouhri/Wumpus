@@ -28,6 +28,11 @@ public class Coordonnees {
     public void setY(int newY){
         this.y = newY;
     }
+    
+    public boolean isEqual(Coordonnees c)
+    {
+    	return c.getX() == this.x && c.getY() == this.y;
+    }
 
     public String toString(){
         return "("+this.x+";"+this.y+")";

@@ -1,10 +1,10 @@
 public class Agent {
 	private Coordonnees position;
-	private boolean hasArrow;
+	private boolean arrow;
 
 	public Agent(Coordonnees coordonnees){
 		this.position = coordonnees;
-		this. hasArrow = true;
+		this.arrow = true;
 	}
 
 	public Coordonnees getPosition() {
@@ -15,11 +15,11 @@ public class Agent {
 		this.position = position;
 	}
 
-	public boolean isHasArrow() {
-		return hasArrow;
+	public boolean hasArrow() {
+		return arrow;
 	}
 
-	public void setHasArrow(boolean hasArrow) {
-		this.hasArrow = hasArrow;
+	public void setArrow(boolean hasArrow) {
+		this.arrow = hasArrow;
 	}
 }

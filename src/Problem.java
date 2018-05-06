@@ -16,7 +16,7 @@ public class Problem {
             s2.setPositionAgent(new Coordonnees(s.getAventurier().getPosition().getX() - 1, s.getAventurier().getPosition().getY()));
         }
         if (a == "TIRERHAUT") {
-            s2.getAventurier().setHasArrow(false);
+            s2.getAventurier().setArrow(false);
         }
         return s2;
     }
