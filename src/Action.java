@@ -1,5 +1,3 @@
-package agent;
-
 public enum Action {
 	ALLERHAUT,
 	ALLERBAS,
