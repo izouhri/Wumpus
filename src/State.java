@@ -1,4 +1,3 @@
-import java.util.ArrayList;
 import java.util.Random;
 
 public class State {
@@ -23,7 +22,7 @@ public class State {
     	do
     	{
     		this.wumpus.setPosition(new Coordonnees(r.nextInt(4), r.nextInt(4)));
-    	} while(wumpus.isEqual(this.aventurier.getPosition()));
+    	} while(wumpus.getPosition().isEqual(this.aventurier.getPosition()));
     	do
     	{
     		this.puits[0] = new Coordonnees(r.nextInt(4), r.nextInt(4));

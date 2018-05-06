@@ -15,34 +15,29 @@ public class Problem {
         if (a == Action.ALLERGAUCHE) {
             s2.setPositionAgent(new Coordonnees(s.getAventurier().getPosition().getX() - 1, s.getAventurier().getPosition().getY()));
         }
-<<<<<<< HEAD
-        if (a == "TIRERHAUT") {
-            s2.getAventurier().setArrow(false);
-=======
         if (a == Action.TIRERHAUT) {
-            s2.getAventurier().setHasArrow(false);
+            s2.getAventurier().setArrow(false);
             if (s.getWumpus().getPosition().getY() > s.getAventurier().getPosition().getY()) {
                 s2.setMortWumpus(true);
             }
         }
         if (a == Action.TIRERBAS) {
-            s2.getAventurier().setHasArrow(false);
+            s2.getAventurier().setArrow(false);
             if (s.getWumpus().getPosition().getY() < s.getAventurier().getPosition().getY()) {
                 s2.setMortWumpus(true);
             }
         }
         if (a == Action.TIRERDROITE) {
-            s2.getAventurier().setHasArrow(false);
+            s2.getAventurier().setArrow(false);
             if (s.getWumpus().getPosition().getX() > s.getAventurier().getPosition().getX()) {
                 s2.setMortWumpus(true);
             }
         }
         if (a == Action.TIRERGAUCHE) {
-            s2.getAventurier().setHasArrow(false);
+            s2.getAventurier().setArrow(false);
             if (s.getWumpus().getPosition().getX() < s.getAventurier().getPosition().getX()) {
                 s2.setMortWumpus(true);
             }
->>>>>>> f7e0731aa2e13cae7ff87e579669e86d6339bb58
         }
         return s2;
     }
