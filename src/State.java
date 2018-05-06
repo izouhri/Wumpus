@@ -1,18 +1,18 @@
 import java.util.ArrayList;
 
 public class State {
-    private Coordonnees aventurier;
+    private Agent aventurier;
     private Coordonnees wumpus;
     private ArrayList<Coordonnees> trous;
     private Coordonnees or;
 
-    public State(Coordonnees aventurier, Coordonnees wumpus, Coordonnees trous1, Coordonnees trou2, Coordonnees or) {
+    public State(Coordonnees coordonnees_aventurier, Coordonnees coordonnees_wumpus, Coordonnees coordonnees_trous1, Coordonnees coordonnees_trou2, Coordonnees coordonnees_or) {
         this.trous = new ArrayList<Coordonnees>();
-        this.trous.add(trous1);
-        this.trous.add(trou2);
-        this.wumpus = wumpus;
-        this.or = or;
-        this.aventurier = aventurier;
+        this.trous.add(coordonnees_trous1);
+        this.trous.add(coordonnees_trou2);
+        this.wumpus = coordonnees_wumpus;
+        this.or = coordonnees_or;
+        this.aventurier = new Agent(coordonnees_aventurier);
     }
 
     public State () {
@@ -21,12 +21,33 @@ public class State {
         this.trous.add(new Coordonnees(3,4));
         this.wumpus = new Coordonnees(1,3);
         this.or = new Coordonnees(3,3);
-        this.aventurier = new Coordonnees(0,0);
+        this.aventurier = new Agent(new Coordonnees(0,0));
     }
 
-    public Coordonnees getAventurier() {
+    public State(State s)
+    {
+        this.trous = s.trous;
+        this.wumpus = s.wumpus;
+        this.or = s.or;
+        this.aventurier = s.aventurier;
+    }
+
+    public Agent getAventurier() {
         return aventurier;
     }
+
+    public void setAventurier(Agent aventurier) {
+        this.aventurier = aventurier;
+    }
+
+    public Coordonnees getWumpus() {
+        return wumpus;
+    }
+
+    public void setWumpus(Coordonnees wumpus) {
+        this.wumpus = wumpus;
+    }
+
 
     public ArrayList<Coordonnees> getTrous() {
         return trous;
@@ -34,14 +55,6 @@ public class State {
 
     public Coordonnees getOr() {
         return or;
-    }
-
-    public Coordonnees getwumpus() {
-        return wumpus;
-    }
-
-    public void setAventurier(Coordonnees aventurier) {
-        this.aventurier = aventurier;
     }
 
     public void setOr(Coordonnees or) {
@@ -52,7 +65,4 @@ public class State {
         this.trous = trous;
     }
 
-    public void setwumpus(Coordonnees wumpus) {
-        this.wumpus = wumpus;
-    }
 }
