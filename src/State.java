@@ -3,22 +3,20 @@ import java.util.ArrayList;
 public class State {
     private Agent aventurier;
     private Coordonnees wumpus;
-    private ArrayList<Coordonnees> trous;
+    private Coordonnees[] puits = new Cordonnees[2];
     private Coordonnees or;
 
-    public State(Coordonnees coordonnees_aventurier, Coordonnees coordonnees_wumpus, Coordonnees coordonnees_trous1, Coordonnees coordonnees_trou2, Coordonnees coordonnees_or) {
-        this.trous = new ArrayList<Coordonnees>();
-        this.trous.add(coordonnees_trous1);
-        this.trous.add(coordonnees_trou2);
-        this.wumpus = coordonnees_wumpus;
-        this.or = coordonnees_or;
-        this.aventurier = new Agent(coordonnees_aventurier);
+    public State(Agent aventurier, Coordonnees wumpus, Coordonnees puitU, Coordonnees puitD, Coordonnees or) {
+        this.puits[0] = puitU;
+        this.puits[1] = puitD;
+        this.wumpus = wumpus;
+        this.or = or;
+        this.aventurier = aventurier;
     }
 
     public State () {
-        this.trous = new ArrayList<Coordonnees>();
-        this.trous.add(new Coordonnees(2,2));
-        this.trous.add(new Coordonnees(3,4));
+        this.puits[0] = new Coordonnees(2,2);
+        this.puits[1] = new Coordonnees(3,4);
         this.wumpus = new Coordonnees(1,3);
         this.or = new Coordonnees(3,3);
         this.aventurier = new Agent(new Coordonnees(0,0));
@@ -26,10 +24,10 @@ public class State {
 
     public State(State s)
     {
-        this.trous = s.trous;
-        this.wumpus = s.wumpus;
-        this.or = s.or;
-        this.aventurier = s.aventurier;
+        this.puits = (Coordonnees[])s.getPuits().clone();
+        this.wumpus = new Coordonnees(s.getWumpus());
+        this.or = new Coordonnees(s.getOr());
+        this.aventurier = s.getAventurier();
     }
 
     public void setPositionAgent(Coordonnees new_coordonnees) {
@@ -52,9 +50,8 @@ public class State {
         this.wumpus = wumpus;
     }
 
-
-    public ArrayList<Coordonnees> getTrous() {
-        return trous;
+    public Coordonnees[] getPuits() {
+        return puits;
     }
 
     public Coordonnees getOr() {
@@ -65,8 +62,6 @@ public class State {
         this.or = or;
     }
 
-    public void setTrous(ArrayList<Coordonnees> trous) {
-        this.trous = trous;
-    }
+
 
 }

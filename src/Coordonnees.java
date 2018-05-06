@@ -7,6 +7,11 @@ public class Coordonnees {
         this.x = x;
         this.y = y;
     }
+    
+    public Coordonnees(Coordonnees c) {
+    	this.x = c.getX();
+    	this.y = c.getY();
+    }
 
     public int getX(){
         return this.x;
@@ -24,7 +29,7 @@ public class Coordonnees {
         this.y = newY;
     }
 
-    public String getXY(){
+    public String toString(){
         return "("+this.x+";"+this.y+")";
     }
 }

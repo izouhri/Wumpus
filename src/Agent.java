@@ -1,6 +1,3 @@
-//from Probleme import *
-
-
 public class Agent {
 	private Coordonnees position;
 	private boolean hasArrow;

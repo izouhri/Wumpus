@@ -1,25 +1,46 @@
 public class Case
-	{
-		private int[] position;
-		private boolean[] attributsCase;
-		private Case[] voisines;
-	
-		public Case() {
-			position = new int[2];
-			attributsCase = new boolean[4]; // Pas sure de 4
-			voisines = new Case[4];
-		}
+{
+	private Coordonnees position;
+	private boolean[] attributs;
+	//private Case[] voisines;
 
-		public Case(int i, int j, Boolean Trou, Boolean Odeur, Boolean Tresor, Boolean CourantAir, Boolean Wumpus, Boolean Agent) {
-		this();
-	
-		position[0]=i;
-		position[1]=j;
-		attributsCase[0]= Trou;
-		attributsCase[1]= Odeur;
-		attributsCase[2]= Tresor;
-		attributsCase[3]= CourantAir;
-		attributsCase[4]= Wumpus;
-		attributsCase[5]= Agent;
-		attributsCase[6]= false;//toujours sur la supposition le wumpus est mort ou pas, ici pas mort
+	public Case(int x, int y) {
+		position = new Cordonnees(x, y);
+		attributsCase = new boolean[6];
+		//voisines = new Case[4];
 	}
+
+	public Case(int x, int x, boolean Puit, boolean Odeur, boolean Tresor, boolean CourantAir, boolean Wumpus, boolean Agent) {
+		position = new Coordonnees(x, y);
+		attributs[0]= Puit;
+		attributs[1]= Odeur;
+		attributs[2]= Tresor;
+		attributs[3]= CourantAir;
+		attributs[4]= Wumpus;
+		attributs[5]= Agent;
+	}
+	
+	public boolean hasPuit() {
+		return attributs[0];
+	}
+	
+	public boolean hasOdeur() {
+		return attributs[1];
+	}
+	
+	public boolean hasTresor() {
+		return attributs[2];
+	}
+	
+	public boolean hasCourantAir() {
+		return attributs[3];
+	}
+	
+	public boolean hasWumpus() {
+		return attributs[4];
+	}
+	
+	public boolean hasAgent() {
+		return attributs[5];
+	}
+}
