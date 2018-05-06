@@ -1,13 +1,4 @@
 public class Problem {
-    private String[] action_deplacement() {
-        String deplacement[] = {"guauche", "droite", "bas", "haut"};
-        return deplacement;
-    }
-
-    private String[] action_tirer_fleche() {
-        String tirer_fleche[] = {"guauche", "droite", "bas", "haut"};
-        return tirer_fleche;
-    }
 
     private State transition(State s, Action a) {
         State s2 = new State(s);

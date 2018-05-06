@@ -5,12 +5,12 @@ public class Case
 	//private Case[] voisines;
 
 	public Case(int x, int y) {
-		position = new Cordonnees(x, y);
-		attributsCase = new boolean[6];
+		position = new Coordonnees(x, y);
+		attributs = new boolean[6];
 		//voisines = new Case[4];
 	}
 
-	public Case(int x, int x, boolean Puit, boolean Odeur, boolean Tresor, boolean CourantAir, boolean Wumpus, boolean Agent) {
+	public Case(int x, int y, boolean Puit, boolean Odeur, boolean Tresor, boolean CourantAir, boolean Wumpus, boolean Agent) {
 		position = new Coordonnees(x, y);
 		attributs[0]= Puit;
 		attributs[1]= Odeur;

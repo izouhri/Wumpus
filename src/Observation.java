@@ -1,9 +1,9 @@
 public class Observation{
 	public Coordonnees position;
-	public Case case;
+	public Case c;
 	
-	public int getPosition() {
-		return position[0];
+	public Coordonnees getPosition() {
+		return position;
 	}
 	
 	//Comment il va decrire la carte

@@ -2,8 +2,9 @@ import java.util.ArrayList;
 
 public class State {
     private Agent aventurier;
+
     private Wumpus wumpus;
-    private Coordonnees[] puits = new Cordonnees[2];
+    private Coordonnees[] puits = new Coordonnees[2];
     private Coordonnees or;
 
     public State(Agent aventurier, Wumpus wumpus, Coordonnees puitU, Coordonnees puitD, Coordonnees or) {
