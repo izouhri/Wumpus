@@ -1,5 +1,3 @@
-package agent;
-
 public enum Action {
 	ALLERHAUT,
 	ALLERBAS,
@@ -10,4 +8,3 @@ public enum Action {
 	TIRERDROITE,
 	TIRERGAUCHE,
 }
-		

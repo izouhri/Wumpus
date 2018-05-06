@@ -2,11 +2,11 @@ import java.util.ArrayList;
 
 public class State {
     private Agent aventurier;
-    private Coordonnees wumpus;
+    private Wumpus wumpus;
     private Coordonnees[] puits = new Cordonnees[2];
     private Coordonnees or;
 
-    public State(Agent aventurier, Coordonnees wumpus, Coordonnees puitU, Coordonnees puitD, Coordonnees or) {
+    public State(Agent aventurier, Wumpus wumpus, Coordonnees puitU, Coordonnees puitD, Coordonnees or) {
         this.puits[0] = puitU;
         this.puits[1] = puitD;
         this.wumpus = wumpus;
@@ -17,7 +17,7 @@ public class State {
     public State () {
         this.puits[0] = new Coordonnees(2,2);
         this.puits[1] = new Coordonnees(3,4);
-        this.wumpus = new Coordonnees(1,3);
+        this.wumpus = new Wumpus(new Coordonnees(1,1));
         this.or = new Coordonnees(3,3);
         this.aventurier = new Agent(new Coordonnees(0,0));
     }
@@ -25,7 +25,7 @@ public class State {
     public State(State s)
     {
         this.puits = (Coordonnees[])s.getPuits().clone();
-        this.wumpus = new Coordonnees(s.getWumpus());
+        this.wumpus = s.getWumpus();
         this.or = new Coordonnees(s.getOr());
         this.aventurier = s.getAventurier();
     }
@@ -42,12 +42,16 @@ public class State {
         this.aventurier = aventurier;
     }
 
-    public Coordonnees getWumpus() {
+    public Wumpus getWumpus() {
         return wumpus;
     }
 
-    public void setWumpus(Coordonnees wumpus) {
+    public void setWumpus(Wumpus wumpus) {
         this.wumpus = wumpus;
+    }
+
+    public void setMortWumpus(boolean etat){
+        this.wumpus.setMort(etat);
     }
 
     public Coordonnees[] getPuits() {
