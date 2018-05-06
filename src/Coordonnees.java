@@ -24,7 +24,7 @@ public class Coordonnees {
         this.y = newY;
     }
 
-    public String getXY(){
+    public String toString(){
         return "("+this.x+";"+this.y+")";
     }
 }
