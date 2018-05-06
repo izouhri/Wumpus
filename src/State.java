@@ -3,11 +3,12 @@ import java.util.Random;
 
 public class State {
     private Agent aventurier;
-    private Coordonnees wumpus;
+
+    private Wumpus wumpus;
     private Coordonnees[] puits = new Coordonnees[2];
     private Coordonnees or;
 
-    public State(Agent aventurier, Coordonnees wumpus, Coordonnees puitU, Coordonnees puitD, Coordonnees or) {
+    public State(Agent aventurier, Wumpus wumpus, Coordonnees puitU, Coordonnees puitD, Coordonnees or) {
         this.puits[0] = puitU;
         this.puits[1] = puitD;
         this.wumpus = wumpus;
@@ -46,7 +47,7 @@ public class State {
     public State(State s)
     {
         this.puits = (Coordonnees[])s.getPuits().clone();
-        this.wumpus = new Coordonnees(s.getWumpus());
+        this.wumpus = s.getWumpus();
         this.or = new Coordonnees(s.getOr());
         this.aventurier = s.getAventurier();
     }
@@ -63,12 +64,16 @@ public class State {
         this.aventurier = aventurier;
     }
 
-    public Coordonnees getWumpus() {
+    public Wumpus getWumpus() {
         return wumpus;
     }
 
-    public void setWumpus(Coordonnees wumpus) {
+    public void setWumpus(Wumpus wumpus) {
         this.wumpus = wumpus;
+    }
+
+    public void setMortWumpus(boolean etat){
+        this.wumpus.setMort(etat);
     }
 
     public Coordonnees[] getPuits() {
@@ -82,7 +87,4 @@ public class State {
     public void setOr(Coordonnees or) {
         this.or = or;
     }
-
-
-
 }

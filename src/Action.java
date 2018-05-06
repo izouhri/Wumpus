@@ -8,4 +8,3 @@ public enum Action {
 	TIRERDROITE,
 	TIRERGAUCHE,
 }
-		
