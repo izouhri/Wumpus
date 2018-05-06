@@ -32,6 +32,10 @@ public class State {
         this.aventurier = s.aventurier;
     }
 
+    public void setPositionAgent(Coordonnees new_coordonnees) {
+        this.aventurier.setPosition(new_coordonnees);
+    }
+
     public Agent getAventurier() {
         return aventurier;
     }
