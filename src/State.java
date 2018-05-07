@@ -14,10 +14,7 @@ public class State {
         this.or = or;
         this.aventurier = aventurier;
         
-        boolean odeur = this.aventurier.getPosition().isVoisin(this.wumpus.getPosition());
-    	boolean air = this.aventurier.getPosition().isVoisin(puits[0])
-    					|| this.aventurier.getPosition().isVoisin(puits[1]);
-    	this.aventurier.setObservation(new Observation(this.aventurier.getPosition(), false, air, false, odeur, false));
+    	this.aventurier.setObservation(Observation.newObservation(this.aventurier.getPosition(), this));
     }
 
     // constructeur pour generer un etat initial aleatoire
@@ -46,11 +43,8 @@ public class State {
     			|| this.puits[1].isEqual(this.aventurier.getPosition())
     			|| this.or.isEqual(this.aventurier.getPosition())
     			|| this.wumpus.getPosition().isEqual(this.aventurier.getPosition()));
-    	
-    	boolean odeur = this.aventurier.getPosition().isVoisin(this.wumpus.getPosition());
-    	boolean air = this.aventurier.getPosition().isVoisin(puits[0])
-    				|| this.aventurier.getPosition().isVoisin(puits[1]);
-    	this.aventurier.setObservation(new Observation(this.aventurier.getPosition(), false, air, false, odeur, false));
+
+    	this.aventurier.setObservation(Observation.newObservation(this.aventurier.getPosition(), this));
     }
 
     //constructeur par copie pour fonction de transition

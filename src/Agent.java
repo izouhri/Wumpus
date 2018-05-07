@@ -42,10 +42,15 @@ public class Agent {
 		this.arrow = hasArrow;
 	}
 	
+	public Observation getObservation(Coordonnees c) {
+		return map[c.getX()][c.getY()];
+	}
+	
 	public void setObservation(Observation o) {
 		map[o.position.getX()][o.position.getY()] = o;
+		// actualiser etat
 		if (o.hasCourantAir())
-			trouverPuits(o.position);
+			trouverPuitU(o.position);
 		else {
 			for (Coordonnees c : whereIsPuitU)
 				if (c.isVoisin(o.position))
@@ -63,55 +68,75 @@ public class Agent {
 					whereIsWumpus.remove(c);
 		}
 	}
-	
-	public Observation getObservation(Coordonnees c) {
-		return map[c.getX()][c.getY()];
-	}
 
 	public void trouverWumpus(Coordonnees odeur) {
 		if (wumpusPosition == null) {
 			trouverAttribut(odeur, whereIsWumpus);
-			
-			for (Coordonnees c : whereIsWumpus)
-				if (!c.isVoisin(odeur))
-					whereIsWumpus.remove(c);
 	
-			for (Coordonnees c : whereIsWumpus)
-			{
-				Observation o = getObservation(c);
-				if ((o != null && !o.hasWumpus()) || c.isEqual(puitUPosition) || c.isEqual(puitDPosition))
+			for (Coordonnees c : whereIsWumpus){
+				if (c.isEqual(puitUPosition) || c.isEqual(puitDPosition))
 					whereIsWumpus.remove(c);
+				else
+					for (Observation[] raw : map)
+						for (Observation o : raw)
+							if (o != null 
+								&& (c.isEqual(o.position)
+										|| (c.isVoisin(o.position) && !o.hasOdeur())))
+							{
+								whereIsWumpus.remove(c);
+							}
 			}
 			if (whereIsWumpus.size() == 1)
 				wumpusPosition = whereIsWumpus.get(0);
 		}
 	}
 	
-	public void trouverPuits(Coordonnees air) {
-		if (puitUPosition == null && puitDPosition == null) {
-			trouverAttribut(air, whereIsPuitU);
-	
-			for (Coordonnees c : whereIsPuitU)
-				if (!c.isVoisin(air))
-				{
-					whereIsPuitD.add(c);
-					whereIsPuitU.remove(c);
-				}
-			
-			for (Coordonnees c : whereIsPuitU)
-			{
-				Observation o = getObservation(c);
-				if ((o != null && !o.hasPuit()) || c.isEqual(wumpusPosition) || c.isEqual(puitDPosition))
-					whereIsPuitU.remove(c);
+	public void trouverPuitU(Coordonnees air) {
+		if (puitUPosition == null) {
+			if (!whereIsPuitU.isEmpty()) {
+				boolean puitD = true;
+				for (Coordonnees c : whereIsPuitU)
+					if (c.isVoisin(air)) {
+						puitD = false;
+						break;
+					}
+
+				if (puitD)
+					trouverPuitD(air);
+				else
+					trouverAttribut(air, whereIsPuitU);
 			}
-			for (Coordonnees c : whereIsPuitD)
-			{
-				Observation o = getObservation(c);
-				if ((o != null && !o.hasPuit()) || c.isEqual(wumpusPosition) || c.isEqual(puitUPosition))
-					whereIsPuitD.remove(c);
+			for (Coordonnees c : whereIsPuitU){
+				if (c.isEqual(wumpusPosition) || c.isEqual(puitDPosition))
+					whereIsPuitU.remove(c);
+				else
+					for (Observation[] raw : map)
+						for (Observation o : raw)
+							if (o != null 
+							&& (c.isEqual(o.position)
+									|| (c.isVoisin(o.position) && !o.hasCourantAir())))
+								whereIsPuitU.remove(c);
 			}
 			if (whereIsPuitU.size() == 1)
 				puitUPosition = whereIsPuitU.get(0);
+		}
+	}
+	
+	public void trouverPuitD(Coordonnees air) {
+		if (puitDPosition == null) {
+			trouverAttribut(air, whereIsPuitD);
+			
+			for (Coordonnees c : whereIsPuitD){
+				if (c.isEqual(puitUPosition) || c.isEqual(wumpusPosition))
+					whereIsPuitD.remove(c);
+				else
+					for (Observation[] raw : map)
+						for (Observation o : raw)
+							if (o != null 
+							&& (c.isEqual(o.position)
+									|| (c.isVoisin(o.position) && !o.hasCourantAir())))
+								whereIsPuitD.remove(c);
+			}
 			if (whereIsPuitD.size() == 1)
 				puitDPosition = whereIsPuitD.get(0);
 		}
@@ -129,5 +154,8 @@ public class Agent {
 			if (indice.getY() > 0)
 				suppositions.add(new Coordonnees(indice.getX(), indice.getY() - 1));
 		}
+		for (Coordonnees c : suppositions)
+			if (!c.isVoisin(indice))
+				suppositions.remove(c);
 	}
 }
