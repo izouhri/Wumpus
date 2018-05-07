@@ -60,10 +60,16 @@ public class Problem {
             return Observation.newObservation(positionAgent, s);
         }
         else if (a == Action.ALLERBAS) {
+        	Coordonnees positionAgent = new Coordonnees(s.getAventurier().getPosition().getX(), s.getAventurier().getPosition().getY() - 1);
+            return Observation.newObservation(positionAgent, s);
         }
         else if (a == Action.ALLERDROITE) {
+        	Coordonnees positionAgent = new Coordonnees(s.getAventurier().getPosition().getX()+ 1, s.getAventurier().getPosition().getY() );
+            return Observation.newObservation(positionAgent, s);
         }
         else if (a == Action.ALLERGAUCHE) {
+        	Coordonnees positionAgent = new Coordonnees(s.getAventurier().getPosition().getX() -1, s.getAventurier().getPosition().getY() );
+            return Observation.newObservation(positionAgent, s);
         }
         else {
         	State s2 = new State(s);
@@ -74,10 +80,24 @@ public class Problem {
                 return Observation.newObservation(s2.getAventurier().getPosition(), s2);
 	        }
 	        else if (a == Action.TIRERBAS) {
+	        	if (s.getWumpus().getPosition().getY() < s.getAventurier().getPosition().getY()) {
+                    s2.setMortWumpus(true);
+                }
+	        	return Observation.newObservation(s2.getAventurier().getPosition(), s2);
 	        }
 	        else if (a == Action.TIRERDROITE) {
+	        	if (s.getWumpus().getPosition().getX() > s.getAventurier().getPosition().getX()) {
+                    s2.setMortWumpus(true);
+                }
+	        	return Observation.newObservation(s2.getAventurier().getPosition(), s2);
 	        }
+        	
+        	
 	        else if (a == Action.TIRERGAUCHE) {
+	        	if (s.getWumpus().getPosition().getX() < s.getAventurier().getPosition().getX()) {
+                    s2.setMortWumpus(true);
+                }
+	        	return Observation.newObservation(s2.getAventurier().getPosition(), s2);
 	        }
 	    }
     	
