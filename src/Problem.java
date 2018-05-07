@@ -3,7 +3,7 @@ public class Problem {
     public State transition(State s, Action a) {
         State s2 = new State(s);
 
-        if (a == Action.ALLERHAUT) {
+        if (a == Action.ALLERHAUT &&s.getAventurier().getPosition().getY() < 3) {
             s2.setPositionAgent(new Coordonnees(s.getAventurier().getPosition().getX(), s.getAventurier().getPosition().getY() + 1));
         }
         else if (a == Action.ALLERBAS) {

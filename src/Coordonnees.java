@@ -31,11 +31,15 @@ public class Coordonnees {
     
     public boolean isEqual(Coordonnees c)
     {
+    	if (c == null)
+    		return false;
     	return c.getX() == this.x && c.getY() == this.y;
     }
     
     public boolean isVoisin(Coordonnees c)
     {
+    	if (c == null)
+    		return false;
     	return c.getX() == this.x && (c.getY() - 1 == this.y || c.getY() + 1 == this.y)
     			|| c.getY() == this.y && (c.getX() - 1 == this.x || c.getX() + 1 == this.x);
     }

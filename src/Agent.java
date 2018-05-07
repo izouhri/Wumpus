@@ -8,6 +8,11 @@ public class Agent {
 									{null, null, null, null},
 									{null, null, null, null}};
 	private ArrayList<Coordonnees> whereIsWumpus = new ArrayList<Coordonnees>();
+	private Coordonnees wumpusPosition = null;
+	private ArrayList<Coordonnees> whereIsPuitU = new ArrayList<Coordonnees>();
+	private Coordonnees puitUPosition = null;
+	private ArrayList<Coordonnees> whereIsPuitD = new ArrayList<Coordonnees>();
+	private Coordonnees puitDPosition = null;
 
 	public Agent(Coordonnees position){
 		this.position = position;
@@ -39,29 +44,90 @@ public class Agent {
 	
 	public void setObservation(Observation o) {
 		map[o.position.getX()][o.position.getY()] = o;
+		if (o.hasCourantAir())
+			trouverPuits(o.position);
+		else {
+			for (Coordonnees c : whereIsPuitU)
+				if (c.isVoisin(o.position))
+					whereIsPuitU.remove(c);
+			for (Coordonnees c : whereIsPuitD)
+				if (c.isVoisin(o.position))
+					whereIsPuitD.remove(c);
+		}
+		if (o.hasOdeur()) {
+			trouverWumpus(o.position);
+		}
+		else {
+			for (Coordonnees c : whereIsWumpus)
+				if (c.isVoisin(o.position))
+					whereIsWumpus.remove(c);
+		}
 	}
 	
 	public Observation getObservation(Coordonnees c) {
 		return map[c.getX()][c.getY()];
 	}
 
-	public void findWumpus(Coordonnees odeur) {
-		if (whereIsWumpus.size() == 1)
-			return;
-		if (whereIsWumpus.isEmpty()) {
-			whereIsWumpus.add(new Coordonnees(odeur.getX(), odeur.getY() + 1));
-			whereIsWumpus.add(new Coordonnees(odeur.getX(), odeur.getY() - 1));
-			whereIsWumpus.add(new Coordonnees(odeur.getX() + 1, odeur.getY()));
-			whereIsWumpus.add(new Coordonnees(odeur.getX() - 1, odeur.getY()));
-		}
-		
-		for (Coordonnees c : whereIsWumpus)
-		{
-			Observation o = getObservation(c);
-			if (o.hasWumpus())
+	public void trouverWumpus(Coordonnees odeur) {
+		if (wumpusPosition == null) {
+			trouverAttribut(odeur, whereIsWumpus);
+			
+			for (Coordonnees c : whereIsWumpus)
+				if (!c.isVoisin(odeur))
+					whereIsWumpus.remove(c);
+	
+			for (Coordonnees c : whereIsWumpus)
 			{
-				whereIsWumpus.remove(c);
+				Observation o = getObservation(c);
+				if ((o != null && !o.hasWumpus()) || c.isEqual(puitUPosition) || c.isEqual(puitDPosition))
+					whereIsWumpus.remove(c);
 			}
+			if (whereIsWumpus.size() == 1)
+				wumpusPosition = whereIsWumpus.get(0);
+		}
+	}
+	
+	public void trouverPuits(Coordonnees air) {
+		if (puitUPosition == null && puitDPosition == null) {
+			trouverAttribut(air, whereIsPuitU);
+	
+			for (Coordonnees c : whereIsPuitU)
+				if (!c.isVoisin(air))
+				{
+					whereIsPuitD.add(c);
+					whereIsPuitU.remove(c);
+				}
+			
+			for (Coordonnees c : whereIsPuitU)
+			{
+				Observation o = getObservation(c);
+				if ((o != null && !o.hasPuit()) || c.isEqual(wumpusPosition) || c.isEqual(puitDPosition))
+					whereIsPuitU.remove(c);
+			}
+			for (Coordonnees c : whereIsPuitD)
+			{
+				Observation o = getObservation(c);
+				if ((o != null && !o.hasPuit()) || c.isEqual(wumpusPosition) || c.isEqual(puitUPosition))
+					whereIsPuitD.remove(c);
+			}
+			if (whereIsPuitU.size() == 1)
+				puitUPosition = whereIsPuitU.get(0);
+			if (whereIsPuitD.size() == 1)
+				puitDPosition = whereIsPuitD.get(0);
+		}
+	}
+	
+	// ajoute des positions possibles en fonction de l'indice
+	private void trouverAttribut(Coordonnees indice, ArrayList<Coordonnees> suppositions) {
+		if (!suppositions.isEmpty()) {
+			if (indice.getX() < 3)
+				suppositions.add(new Coordonnees(indice.getX() + 1, indice.getY()));
+			if (indice.getX() > 0)
+				suppositions.add(new Coordonnees(indice.getX() - 1, indice.getY()));
+			if (indice.getY() < 3)
+				suppositions.add(new Coordonnees(indice.getX(), indice.getY() + 1));
+			if (indice.getY() > 0)
+				suppositions.add(new Coordonnees(indice.getX(), indice.getY() - 1));
 		}
 	}
 }
