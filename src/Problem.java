@@ -77,19 +77,32 @@ public class Problem {
         		if (s.getWumpus().getPosition().getY() > s.getAventurier().getPosition().getY()) {
                     s2.setMortWumpus(true);
                 }
+<<<<<<< HEAD
                 return s2.getAventurier.getPosition;
 	        } 
+=======
+                return Observation.newObservation(s2.getAventurier().getPosition(), s2);
+	        }
+>>>>>>> efdf9c43c558e2e2336b6321ccd504f265be5291
 	        else if (a == Action.TIRERBAS) {
 	        	if (s.getWumpus().getPosition().getY() < s.getAventurier().getPosition().getY()) {
                     s2.setMortWumpus(true);
                 }
+<<<<<<< HEAD
 	        	return s2.getAventurier.getPosition;
+=======
+	        	return Observation.newObservation(s2.getAventurier().getPosition(), s2);
+>>>>>>> efdf9c43c558e2e2336b6321ccd504f265be5291
 	        }
 	        else if (a == Action.TIRERDROITE) {
 	        	if (s.getWumpus().getPosition().getX() > s.getAventurier().getPosition().getX()) {
                     s2.setMortWumpus(true);
                 }
+<<<<<<< HEAD
 	        	return s2.getAventurier.getPosition;
+=======
+	        	return Observation.newObservation(s2.getAventurier().getPosition(), s2);
+>>>>>>> efdf9c43c558e2e2336b6321ccd504f265be5291
 	        }
         	
         	
@@ -97,7 +110,7 @@ public class Problem {
 	        	if (s.getWumpus().getPosition().getX() < s.getAventurier().getPosition().getX()) {
                     s2.setMortWumpus(true);
                 }
-	        	return s2.getAventurier.getposition
+	        	return Observation.newObservation(s2.getAventurier().getPosition(), s2);
 	        }
 	    }
     	

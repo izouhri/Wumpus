@@ -46,8 +46,22 @@ public class Agent {
 	}
 
 	public void findWumpus(Coordonnees odeur) {
+		if (whereIsWumpus.size() == 1)
+			return;
 		if (whereIsWumpus.isEmpty()) {
 			whereIsWumpus.add(new Coordonnees(odeur.getX(), odeur.getY() + 1));
+			whereIsWumpus.add(new Coordonnees(odeur.getX(), odeur.getY() - 1));
+			whereIsWumpus.add(new Coordonnees(odeur.getX() + 1, odeur.getY()));
+			whereIsWumpus.add(new Coordonnees(odeur.getX() - 1, odeur.getY()));
+		}
+		
+		for (Coordonnees c : whereIsWumpus)
+		{
+			Observation o = getObservation(c);
+			if (o.hasWumpus())
+			{
+				whereIsWumpus.remove(c);
+			}
 		}
 	}
 }
