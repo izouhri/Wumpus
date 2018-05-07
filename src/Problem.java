@@ -71,8 +71,7 @@ public class Problem {
         		if (s.getWumpus().getPosition().getY() > s.getAventurier().getPosition().getY()) {
                     s2.setMortWumpus(true);
                 }
-        		Coordonnees positionAgent = new Coordonnees(s2.getAventurier().getPosition().getX(), s2.getAventurier().getPosition().getY() + 1);
-                return Observation.newObservation(positionAgent, s2);
+                return Observation.newObservation(s2.getAventurier().getPosition(), s2);
 	        }
 	        else if (a == Action.TIRERBAS) {
 	        }
