@@ -16,6 +16,17 @@ public class Observation
 		attributs[4] = wumpus;
 	}
 	
+	public static Observation newObservation(Coordonnees c, State s)
+	{
+		boolean puit = c.isEqual(s.getPuits()[0]) || c.isEqual(s.getPuits()[1]);
+		boolean courantAir = c.isVoisin(s.getPuits()[0]) || c.isVoisin(s.getPuits()[1]);
+		boolean tresor = c.isEqual(s.getOr());
+		boolean odeur = !s.getWumpus().isMort() && c.isVoisin(s.getWumpus().getPosition());
+		boolean wumpus = !s.getWumpus().isMort() && c.isEqual(s.getWumpus().getPosition());
+		
+		return new Observation(c, puit, courantAir, tresor, odeur, wumpus);
+	}
+	
 	public boolean hasPuit() {
 		return attributs[0];
 	}
