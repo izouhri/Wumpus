@@ -3,16 +3,16 @@ public class Problem {
     public State transition(State s, Action a) {
         State s2 = new State(s);
 
-        if (a == Action.ALLERHAUT &&s.getAventurier().getPosition().getY() < 3) {
+        if (a == Action.ALLERHAUT && s.getAventurier().getPosition().getY() < 3) {
             s2.setPositionAgent(new Coordonnees(s.getAventurier().getPosition().getX(), s.getAventurier().getPosition().getY() + 1));
         }
-        else if (a == Action.ALLERBAS) {
+        else if (a == Action.ALLERBAS && s.getAventurier().getPosition().getY() > 0) {
             s2.setPositionAgent(new Coordonnees(s.getAventurier().getPosition().getX(), s.getAventurier().getPosition().getY() - 1));
         }
-        else if (a == Action.ALLERDROITE) {
+        else if (a == Action.ALLERDROITE && s.getAventurier().getPosition().getX() < 3) {
             s2.setPositionAgent(new Coordonnees(s.getAventurier().getPosition().getX() + 1, s.getAventurier().getPosition().getY()));
         }
-        else if (a == Action.ALLERGAUCHE) {
+        else if (a == Action.ALLERGAUCHE && s.getAventurier().getPosition().getX() > 0) {
             s2.setPositionAgent(new Coordonnees(s.getAventurier().getPosition().getX() - 1, s.getAventurier().getPosition().getY()));
         }
         else if (a == Action.TIRERHAUT) {
@@ -79,27 +79,28 @@ public class Problem {
                 }
                 return Observation.newObservation(s2.getAventurier().getPosition(), s2);
 	        }
+
 	        else if (a == Action.TIRERBAS) {
 	        	if (s.getWumpus().getPosition().getY() < s.getAventurier().getPosition().getY()) {
                     s2.setMortWumpus(true);
                 }
 	        	return Observation.newObservation(s2.getAventurier().getPosition(), s2);
+
 	        }
 	        else if (a == Action.TIRERDROITE) {
 	        	if (s.getWumpus().getPosition().getX() > s.getAventurier().getPosition().getX()) {
                     s2.setMortWumpus(true);
                 }
 	        	return Observation.newObservation(s2.getAventurier().getPosition(), s2);
+
 	        }
-        	
-        	
 	        else if (a == Action.TIRERGAUCHE) {
 	        	if (s.getWumpus().getPosition().getX() < s.getAventurier().getPosition().getX()) {
                     s2.setMortWumpus(true);
                 }
 	        	return Observation.newObservation(s2.getAventurier().getPosition(), s2);
 	        }
-	    }
+        }
     	
     	return null;
     }

@@ -1,2 +1,8 @@
-/Wumpus.class
+/Action.class
+/Agent.class
+/Algo.class
+/Coordonnees.class
 /Observation.class
+/Problem.class
+/State.class
+/Wumpus.class
