@@ -1,4 +1,6 @@
 import java.util.ArrayList;
+import java.util.PriorityQueue;
+import java.util.Queue;
 
 public class Algo {
 
@@ -16,24 +18,22 @@ public class Algo {
     public static void solution(Problem p, State s) {
     	
     }
+    
 
-    //regles fonction qui prend etat en pararet et qui te dit la'action a efectuer
-
-    public Action nextMove (State s, Problem p) {
-
+    public Action nextMove(State s, Problem p) {
+        Queue<Action> actions = new PriorityQueue<Action>();
         if (s.getAventurier().getWhereIsWumpus().contains(p.transition(s,Action.ALLERHAUT).getAventurier().getPosition())){
-            return Action.ALLERHAUT;
+            actions.add(Action.ALLERHAUT);
         }
         if (s.getAventurier().getWhereIsWumpus().contains(p.transition(s,Action.ALLERBAS).getAventurier().getPosition())){
-            return Action.ALLERBAS;
+            actions.add(Action.ALLERBAS);
         }
         if (s.getAventurier().getWhereIsWumpus().contains(p.transition(s,Action.ALLERDROITE).getAventurier().getPosition())){
-            return Action.ALLERDROITE;
+            actions.add(Action.ALLERDROITE);
         }
         if (s.getAventurier().getWhereIsWumpus().contains(p.transition(s,Action.ALLERGAUCHE).getAventurier().getPosition())){
-            return Action.ALLERGAUCHE;
+            actions.add(Action.ALLERGAUCHE);
         }
-        else return Action.ALLERGAUCHE;
     }
 
 
