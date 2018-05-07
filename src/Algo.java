@@ -2,6 +2,16 @@ public class Algo {
 
     public static void main(String[] args) {
         State initState = new State();
-        System.out.print("Position des elements :  Aventurier "+initState.getAventurier().getPosition().toString()+" Or "+initState.getOr().toString()+" Wumpus "+initState.getWumpus().getPosition().toString()+" 1er trou "+initState.getPuits()[0].toString()+" 2eme trou "+initState.getPuits()[1].toString());
+        System.out.println(initState.toString());
+        
+        Observation o = initState.getAventurier().getObservation(initState.getAventurier().getPosition());
+        System.out.println(o.toString());
+        State copy = new Problem().transition(initState, Action.ALLERBAS);
+        System.out.println(initState.toString());
+        System.out.println(copy.toString());
+    }
+    
+    public static void solution(Problem p, State s) {
+    	
     }
 }

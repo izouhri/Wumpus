@@ -3,10 +3,15 @@ public class Wumpus {
     private Coordonnees position;
     private boolean mort;
 
-    public Wumpus (Coordonnees coordonnees){
-        this.position = coordonnees;
+    public Wumpus(Coordonnees position){
+        this.position = position;
         this.mort = false;
     }
+    
+    public Wumpus(Wumpus wumpus) {
+		this.position = new Coordonnees(wumpus.getPosition());
+		this.mort = wumpus.isMort();
+	}
 
     public Coordonnees getPosition() {
         return position;

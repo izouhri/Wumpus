@@ -33,6 +33,12 @@ public class Coordonnees {
     {
     	return c.getX() == this.x && c.getY() == this.y;
     }
+    
+    public boolean isVoisin(Coordonnees c)
+    {
+    	return c.getX() == this.x && (c.getY() - 1 == this.y || c.getY() + 1 == this.y)
+    			|| c.getY() == this.y && (c.getX() - 1 == this.x || c.getX() + 1 == this.x);
+    }
 
     public String toString(){
         return "("+this.x+";"+this.y+")";
