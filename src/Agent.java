@@ -116,7 +116,19 @@ public class Agent {
 				puitDPosition = whereIsPuitD.get(0);
 		}
 	}
-	
+
+	public ArrayList<Coordonnees> getWhereIsPuitD() {
+		return whereIsPuitD;
+	}
+
+	public ArrayList<Coordonnees> getWhereIsPuitU() {
+		return whereIsPuitU;
+	}
+
+	public ArrayList<Coordonnees> getWhereIsWumpus() {
+		return whereIsWumpus;
+	}
+
 	// ajoute des positions possibles en fonction de l'indice
 	private void trouverAttribut(Coordonnees indice, ArrayList<Coordonnees> suppositions) {
 		if (!suppositions.isEmpty()) {
