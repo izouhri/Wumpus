@@ -38,8 +38,37 @@ public class Problem {
             if (s.getWumpus().getPosition().getX() < s.getAventurier().getPosition().getX()) {
                 s2.setMortWumpus(true);
             }
+            
+            else if(a == Action.)
+
+          
         }
         return s2;
+    }
+    public static void etape() {//permet d'avoir touets les actions que va effectuer l'agent
+    	try {
+    		System.out.println("Appuyez sur ENTRE pour continuer!");
+    		Scanner.scanner = new Scanner(System.in).useDelimiter("");//eviter pb et tockenize l'input du sccanner(en gros fonctionne comme "StringTokenize class"
+    		scanner.next();
+    		}
+    		catch(Exception error) {
+    			
+    		}
+    	
+    	
+    public State observation(state s, Action a) {
+    	switch(observation) {
+    	case puit: return "puit";
+    	case courantAir : return "CourantAir";
+    	case tresor : return "$$";
+    	case odeur : return "Odeur";
+    	case Wumpus : return "Wumpus";
+    	
+    	}
+    		return " ";
+    		
+    	}
+    protected static String
     }
 }
     //To do

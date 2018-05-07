@@ -1,44 +1,42 @@
-public class Observation{
-		public int[] position;
-		public boolean[] attributsCaseObservable;
-		
-		public Observation(){
-			
-		}
-		public int geti() {
-				return position[0];
-		}
+public class Observation
+{
+	public Coordonnees position;
+	private boolean[] attributs = new boolean[5];
 
-		public int getj() {
-			return position[1];
-		}
-		public boolean getTrou() { //Trou= Puit de toute façon
-			return attributsCaseObservable[0];
-		}
-		
-		public boolean getOdeur() { //Odeur du wumpus
-			return attributsCaseObservable[1];
-		}
-		
-		public boolean getTresor() { //Le trésor
-			return attributsCaseObservable[2];
-		}
-		
-		public boolean getCourantAir() { //Le courant d'air
-			return attributsCaseObservable[3];
-		}
-		public boolean getWumpus() { // Je me demande s'il ne faut pas ajouter le Wumpus mort??
-			return attributsCaseObservable[4];
-		}
-		public boolean getAgent() {
-			return attributsCaseObservable[5];
-		}
-		//Comment il va décrire la carte
-		
-		public void Description() {
-			int i,j;
-			System.out.println("La carte :{\n");
-			String[] nbCases;
-			//System.out.println("La carte est de taille :" +nbCases[0]"*" +nbCases[0]);
-		}
+	public Observation(Coordonnees c) {
+		position = c;
 	}
+
+	public Observation(Coordonnees c, boolean puit, boolean courantAir, boolean tresor, boolean odeur, boolean wumpus) {
+		position = c;
+		attributs[0] = puit;
+		attributs[1] = courantAir;
+		attributs[2] = tresor;
+		attributs[3] = odeur;
+		attributs[4] = wumpus;
+	}
+	
+	public boolean hasPuit() {
+		return attributs[0];
+	}
+	
+	public boolean hasCourantAir() {
+		return attributs[1];
+	}
+	
+	public boolean hasTresor() {
+		return attributs[2];
+	}
+	
+	public boolean hasOdeur() {
+		return attributs[3];
+	}
+	
+	public boolean hasWumpus() {
+		return attributs[4];
+	}
+	
+	public String toString() {
+		return hasPuit() + ", " + hasCourantAir() + ", " + hasTresor() + ", " + hasOdeur() + ", " + hasWumpus();
+	}
+}
