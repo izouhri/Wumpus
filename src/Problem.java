@@ -78,7 +78,7 @@ public class Problem {
                     s2.setMortWumpus(true);
                 }
 
-                return s2.getAventurier.getPosition;
+                return s2.getAventurier.getPosition();
 	        
                 return Observation.newObservation(s2.getAventurier().getPosition(), s2);
 	        }
@@ -88,7 +88,7 @@ public class Problem {
                     s2.setMortWumpus(true);
                 }
 
-	        	return s2.getAventurier.getPosition;
+	        	return s2.getAventurier.getPosition();
 
 	        	return Observation.newObservation(s2.getAventurier().getPosition(), s2);
 
@@ -96,9 +96,9 @@ public class Problem {
 	        else if (a == Action.TIRERDROITE) {
 	        	if (s.getWumpus().getPosition().getX() > s.getAventurier().getPosition().getX()) {
                     s2.setMortWumpus(true);
-                }s
+                }
 
-	        	return s2.getAventurier.getPosition;
+	        	return s2.getAventurier.getPosition();
 
 	        	return Observation.newObservation(s2.getAventurier().getPosition(), s2);
 
@@ -109,9 +109,24 @@ public class Problem {
 	        	if (s.getWumpus().getPosition().getX() < s.getAventurier().getPosition().getX()) {
                     s2.setMortWumpus(true);
                 }
+	        	return s2.getAventurier().getPosition();
+	        	
 	        	return Observation.newObservation(s2.getAventurier().getPosition(), s2);
 	        }
-	    }
+        	//condition qui l'empechera d'avancer s'il se retrouve a 3 ou 0 en fonction de l'axe
+	        else if (a== Action.ALLERHAUT && s.getAventurier().getPosition().getY() < 3) {
+                whereIsWumpus.add(new Coordonnees(getAventurier().getPosition().getX(), getAventurier().getPosition().getY()));
+	        }
+	        else if (a== Action.ALLERBAS && s.getAventurier().getPosition().getY()  > 0) {
+                whereIsWumpus.add(new Coordonnees(s.getAventurier().getPosition().getX() - 1, s.getAventurier().getPosition().getY()));
+	        }
+            else if (a== Action.ALLERDROITE && s.getAventurier().getPosition().getX()  < 3) {
+                whereIsWumpus.add(new Coordonnees(s.getAventurier().getPosition().getX(), s.getAventurier().getPosition().getY() + 1));
+            }
+            else if (a== Action.ALLERGAUCHE && s.getAventurier().getPosition().getX() > 0) {
+                whereIsWumpus.add(new Coordonnees(s.getAventurier().getPosition().getX(), s.getAventurier().getPosition().getY() - 1));
+            }
+        }
     	
     	return null;
     }
