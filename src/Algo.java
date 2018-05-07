@@ -14,4 +14,9 @@ public class Algo {
     public static void solution(Problem p, State s) {
     	
     }
+    
+    private static Action agentModel(Observation o, Agent a) {
+    	a.setObservation(o);
+    	return null;
+    }
 }
