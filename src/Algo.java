@@ -4,55 +4,139 @@ import java.util.Queue;
 
 public class Algo {
 
-    public static void main(String[] args) {
+	Problem problem;
+	
+    public Algo(Problem p) {
+		this.problem = p;
+	}
+
+	public static void main(String[] args) {
+    	Algo a = new Algo(new Problem());
         State initState = new State();
         System.out.println(initState.toString());
         
         Observation o = initState.getAventurier().getObservation(initState.getAventurier().getPosition());
         System.out.println(o.toString());
-        State copy = new Problem().transition(initState, Action.ALLERBAS);
+        State copy = a.problem.transition(initState, Action.ALLERBAS);
         System.out.println(initState.toString());
         System.out.println(copy.toString());
     }
     
-    public static void solution(Problem p, State s) {
+    public void solution(State s) {
     	
     }
 
 
-    public Action nextMove(State s, Problem p) {
-        Queue<Action> actions = new PriorityQueue<Action>();
-        if (!s.getAventurier().getWhereIsWumpus().contains(p.transition(s,Action.ALLERHAUT).getAventurier().getPosition())){
-            if (s.getAventurier().getObservation((p.transition(s,Action.ALLERHAUT).getAventurier().getPosition())) == null){
-                actions.add(Action.ALLERHAUT); //mettre en priorité
-            }
-            // else Mettre allzeHaut pas priorité
+    public Action nextAction(State s) {
+        // d�finition variables utiles      
+        Agent agent = s.getAventurier();
+        Coordonnees positionAgent = s.getAventurier().getPosition(); 
+        
+        Coordonnees enhaut = new Coordonnees(positionAgent);
+        enhaut.setY(positionAgent.getY() + 1);
+        Coordonnees enbas = new Coordonnees(positionAgent);
+        enbas.setY(positionAgent.getY() - 1);
+        Coordonnees adroite = new Coordonnees(positionAgent);
+        adroite.setY(positionAgent.getX() + 1);
+        Coordonnees agauche = new Coordonnees(positionAgent);
+        agauche.setY(positionAgent.getX() - 1);
+        
+        // suppositions de la position du wumpus
+        boolean wumpusEnHaut = agent.getWhereIsWumpus().contains(enhaut);
+        boolean wumpusEnBas = agent.getWhereIsWumpus().contains(enbas);
+        boolean wumpusAdroite = agent.getWhereIsWumpus().contains(adroite);
+        boolean wumpusAgauche = agent.getWhereIsWumpus().contains(agauche);
+        
+        // suppositions de la position des puits
+        boolean puitHaut = agent.getWhereIsPuitU().contains(enhaut)
+        					|| agent.getWhereIsPuitD().contains(enhaut);
+        boolean puitBas = agent.getWhereIsPuitU().contains(enbas)
+							|| agent.getWhereIsPuitD().contains(enbas);
+        boolean puisDroite = agent.getWhereIsPuitU().contains(adroite)
+							|| agent.getWhereIsPuitD().contains(adroite);
+        boolean puisGauche = agent.getWhereIsPuitU().contains(agauche)
+							|| agent.getWhereIsPuitD().contains(agauche);
+        
+        // Decision pour les actions
+        ArrayList<Action> actionsPrio = new ArrayList<Action>();
+        ArrayList<Action> actionsNonPrio = new ArrayList<Action>();
+        if (positionAgent.getY() < 4)
+        {
+            if (agent.getObservation(enhaut) == null && !wumpusEnHaut && !puitHaut)
+                actionsPrio.add(Action.ALLERHAUT);
+            else
+            	actionsNonPrio.add(Action.ALLERHAUT);
         }
-        if (!s.getAventurier().getWhereIsWumpus().contains(p.transition(s,Action.ALLERBAS).getAventurier().getPosition())){
-            if (s.getAventurier().getObservation((p.transition(s,Action.ALLERBAS).getAventurier().getPosition())) == null){
-                actions.add(Action.ALLERBAS);
-            }
-            // else pas en priorité actions.add(Action.ALLERBAS);
+        if (positionAgent.getY() > 0)
+        {
+            if (agent.getObservation(enbas) == null && !wumpusEnBas && !puitBas)
+                actionsPrio.add(Action.ALLERBAS);
+            else
+            	actionsNonPrio.add(Action.ALLERBAS);
         }
-        if (!s.getAventurier().getWhereIsWumpus().contains(p.transition(s,Action.ALLERDROITE).getAventurier().getPosition())){
-            if (s.getAventurier().getObservation((p.transition(s,Action.ALLERDROITE).getAventurier().getPosition())) == null){
-                actions.add(Action.ALLERDROITE);
-            }
-            //else pas priorité actions.add(Action.ALLERDROITE);
+        if (positionAgent.getX() < 4)
+        {
+            if (agent.getObservation(adroite) == null && !wumpusAdroite && !puisDroite)
+                actionsPrio.add(Action.ALLERDROITE);
+            else
+            	actionsNonPrio.add(Action.ALLERDROITE);
         }
-        if (!s.getAventurier().getWhereIsWumpus().contains(p.transition(s,Action.ALLERGAUCHE).getAventurier().getPosition())){
-            if (s.getAventurier().getObservation((p.transition(s,Action.ALLERGAUCHE).getAventurier().getPosition())) == null){
-                actions.add(Action.ALLERGAUCHE);
-            }
-            // pas en priorité actions.add(Action.ALLERGAUCHE);
+        if (positionAgent.getX() > 0)
+        {
+            if (agent.getObservation(agauche) == null && !wumpusAgauche && !puisGauche)
+                actionsPrio.add(Action.ALLERGAUCHE);
+            else
+            	actionsNonPrio.add(Action.ALLERGAUCHE);
         }
-        // Si aucune priorité
-
+        if (actionsPrio.isEmpty()) {// lorsque preferable de tirer la fleche
+        	if (s.getAventurier().hasArrow()) {
+        		if (estEntoureWumpus(s, actionsNonPrio))
+                {
+                    if (actionsNonPrio.contains(Action.ALLERHAUT))
+                    	actionsPrio.add(Action.TIRERHAUT);
+                    if (actionsNonPrio.contains(Action.ALLERBAS))
+                    	actionsPrio.add(Action.TIRERBAS);
+                    if (actionsNonPrio.contains(Action.ALLERDROITE))
+                    	actionsPrio.add(Action.TIRERDROITE);
+                    if (actionsNonPrio.contains(Action.ALLERGAUCHE))
+                    	actionsPrio.add(Action.TIRERGAUCHE);
+                }
+                else if (agent.getWhereIsWumpus().size() == 2) {
+                	int i = 0;
+                	while (actionsPrio.isEmpty() && i < 2) {
+                		Coordonnees wumpusPosition = agent.getWhereIsWumpus().get(i);
+                		if (wumpusPosition.getX() == positionAgent.getX()) {
+        		            if (wumpusPosition.getY() > positionAgent.getY())
+        		            	actionsPrio.add(Action.TIRERHAUT);
+            		        else
+            		        	actionsPrio.add(Action.TIRERBAS);
+            		    }
+                		else if (wumpusPosition.getY() == positionAgent.getY()) {
+                			if (wumpusPosition.getX() > positionAgent.getX())
+                				actionsPrio.add(Action.TIRERDROITE);
+            		        else
+            		        	actionsPrio.add(Action.TIRERGAUCHE);
+                		}
+                	}
+                }
+        	}
+        	else
+        		return actionsNonPrio.get(0);
+        }
+        return actionsPrio.get(0);
     }
 
-
+	private boolean estEntoureWumpus(State s, ArrayList<Action> possibleMoves) {// Si les positions possibles du Wumpus (en fonction des connaissances de l'agent) entourent l'agent
+    	for (Action move : possibleMoves)
+    	{
+    		boolean dangerousMove = s.getAventurier().getWhereIsWumpus().contains(problem.transition(s, move).getAventurier().getPosition());
+    		if (!dangerousMove)
+    			return false;
+    	}
+    	return true;
+    }
     
-    private static Action agentModel(Observation o, Agent a) {
+    private Action agentModel(Observation o, Agent a) {
     	a.setObservation(o);
     	return null;
     }
