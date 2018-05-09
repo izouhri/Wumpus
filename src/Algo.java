@@ -23,9 +23,7 @@ public class Algo {
         State newState = a.problem.transition(initState, action);
         System.out.println(newState.toString());
         int i = 0;
-        boolean gameOver = newState.getAventurier().getPosition().equals(newState.getWumpus().getPosition())
-                			|| newState.getAventurier().getPosition().equals(newState.getPuits()[0])
-                			|| newState.getAventurier().getPosition().equals(newState.getPuits()[1]);
+        boolean gameOver = a.gameOver(newState);
         boolean win = newState.getOr().equals(newState.getAventurier().getPosition());
         while (!win && !gameOver && i < 100) {
         	o = a.problem.observation(oldState, action, newState.getAventurier());
@@ -37,9 +35,7 @@ public class Algo {
             newState = a.problem.transition(newState, action);
             System.out.println(newState.toString());
             win = newState.getOr().equals(newState.getAventurier().getPosition());
-            gameOver = newState.getAventurier().getPosition().equals(newState.getWumpus().getPosition())
-                    	|| newState.getAventurier().getPosition().equals(newState.getPuits()[0])
-                    	|| newState.getAventurier().getPosition().equals(newState.getPuits()[1]);
+            gameOver = a.gameOver(newState);
             i ++;
         }
         if (gameOver) {
@@ -50,6 +46,22 @@ public class Algo {
         }
         else System.out.print("Game Impossible");
     }
+	
+	public boolean gameOver(State s) {
+		Agent aventurier = s.getAventurier();
+		Wumpus wumpus = s.getWumpus();
+		if (aventurier.getPosition().equals(wumpus.getPosition())
+			&& !wumpus.isMort())
+		{
+			return true;
+		}
+		if (aventurier.getPosition().equals(s.getPuits()[0])
+			|| aventurier.getPosition().equals(s.getPuits()[1]))
+		{
+			return true;
+		}
+		return false;
+	}
 
     public Action nextAction(State s) {
         // definition variables utiles      
