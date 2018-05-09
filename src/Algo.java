@@ -10,9 +10,9 @@ public class Algo {
 
 	public static void main(String[] args) {
     	Algo a = new Algo(new Problem());
-        State initState = new State(new Agent(3, 2), new Wumpus(2, 2), new Coordonnees(0, 1), new Coordonnees(1, 3), new Coordonnees(1, 1));
-        //while (!a.problem.isResolvable(initState))
-        //	initState = new State();
+        State initState = new State();
+        while (!a.problem.isResolvable(initState))
+        initState = new State();
         System.out.println(initState.toString());
         Observation o = Observation.newObservation(initState.getAventurier().getPosition(), initState);
         System.out.println(o.toString());
