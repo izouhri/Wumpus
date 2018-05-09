@@ -48,8 +48,15 @@ public class Agent {
 	}
 	
 	public void setObservation(Observation o) {
+		// comparer avec une observation anterieure de la meme case
+		Observation oldObservation = map[o.position.getX()][o.position.getY()];
+		if (oldObservation != null) {
+			if (oldObservation.hasOdeur() && !o.hasOdeur()) {
+				isWumpusDead = true;
+			}
+		}
 		map[o.position.getX()][o.position.getY()] = o;
-		// actualiser etat
+		// actualiser connaissances du monde
 		if (o.hasCourantAir())
 			trouverPuitU(o.position);
 		else {

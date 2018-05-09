@@ -43,8 +43,6 @@ public class State {
     			|| this.puits[1].equals(this.aventurier.getPosition())
     			|| this.or.equals(this.aventurier.getPosition())
     			|| this.wumpus.getPosition().equals(this.aventurier.getPosition()));
-
-    	this.aventurier.setObservation(Observation.newObservation(this.aventurier.getPosition(), this));
     }
 
     //constructeur par copie pour fonction de transition

@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+
 public class Problem {
 
     public State transition(State s, Action a) {
@@ -43,66 +45,89 @@ public class Problem {
         return s2;
     }
     
-    /*public static void etape() {//permet d'avoir touets les actions que va effectuer l'agent
-    	try {
-		System.out.println("Appuyez sur ENTRE pour continuer!");
-		Scanner.scanner = new Scanner(System.in).useDelimiter("");//eviter pb et tockenize l'input du sccanner(en gros fonctionne comme "StringTokenize class"
-		scanner.next();
-		}
-		catch(Exception error) {
-			
-		}
-    }*/
-    	
-    	
-    public Observation observation(State s, Action a) {
+    public Observation observation(State s, Action a, Agent agent) {
+
+    	Coordonnees positionAgent = agent.getPosition();
     	if (a == Action.ALLERHAUT) {
-    		Coordonnees positionAgent = new Coordonnees(s.getAventurier().getPosition().getX(), s.getAventurier().getPosition().getY() + 1);
-            return Observation.newObservation(positionAgent, s);
+    		Coordonnees newPositionAgent = new Coordonnees(positionAgent.getX(), positionAgent.getY() + 1);
+            return Observation.newObservation(newPositionAgent, s);
         }
         else if (a == Action.ALLERBAS) {
-        	Coordonnees positionAgent = new Coordonnees(s.getAventurier().getPosition().getX(), s.getAventurier().getPosition().getY() - 1);
-            return Observation.newObservation(positionAgent, s);
+        	Coordonnees newPositionAgent = new Coordonnees(positionAgent.getX(), positionAgent.getY() - 1);
+            return Observation.newObservation(newPositionAgent, s);
         }
         else if (a == Action.ALLERDROITE) {
-        	Coordonnees positionAgent = new Coordonnees(s.getAventurier().getPosition().getX()+ 1, s.getAventurier().getPosition().getY() );
-            return Observation.newObservation(positionAgent, s);
+        	Coordonnees newPositionAgent = new Coordonnees(positionAgent.getX()+ 1, positionAgent.getY() );
+            return Observation.newObservation(newPositionAgent, s);
         }
         else if (a == Action.ALLERGAUCHE) {
-        	Coordonnees positionAgent = new Coordonnees(s.getAventurier().getPosition().getX() -1, s.getAventurier().getPosition().getY() );
-            return Observation.newObservation(positionAgent, s);
+        	Coordonnees newPositionAgent = new Coordonnees(positionAgent.getX() -1, positionAgent.getY() );
+            return Observation.newObservation(newPositionAgent, s);
         }
         else {
         	State s2 = new State(s);
+        	Coordonnees positionWumpus = s.getWumpus().getPosition();
+        	ArrayList<Coordonnees> whereIsWumpus = agent.getWhereIsWumpus();
         	if (a == Action.TIRERHAUT) {
-        		if (s.getWumpus().getPosition().getY() > s.getAventurier().getPosition().getY()) {
+        		if (positionWumpus.getY() > positionAgent.getY()) {
                     s2.setMortWumpus(true);
                 }
-                return Observation.newObservation(s2.getAventurier().getPosition(), s2);
+        		for (Coordonnees c : whereIsWumpus) {
+        			if (c.getY() == agent.getPosition().getY())
+        				whereIsWumpus.remove(c);
+        		}
+                return Observation.newObservation(positionAgent, s2);
 	        }
 
 	        else if (a == Action.TIRERBAS) {
-	        	if (s.getWumpus().getPosition().getY() < s.getAventurier().getPosition().getY()) {
+	        	if (positionWumpus.getY() < positionAgent.getY()) {
                     s2.setMortWumpus(true);
                 }
-	        	return Observation.newObservation(s2.getAventurier().getPosition(), s2);
+	        	for (Coordonnees c : whereIsWumpus) {
+        			if (c.getY() == agent.getPosition().getY())
+        				whereIsWumpus.remove(c);
+        		}
+	        	return Observation.newObservation(positionAgent, s2);
 
 	        }
 	        else if (a == Action.TIRERDROITE) {
-	        	if (s.getWumpus().getPosition().getX() > s.getAventurier().getPosition().getX()) {
+	        	if (positionWumpus.getX() > positionAgent.getX()) {
                     s2.setMortWumpus(true);
                 }
-	        	return Observation.newObservation(s2.getAventurier().getPosition(), s2);
+	        	for (Coordonnees c : whereIsWumpus) {
+        			if (c.getX() == agent.getPosition().getX())
+        				whereIsWumpus.remove(c);
+        		}
+	        	return Observation.newObservation(positionAgent, s2);
 
 	        }
 	        else if (a == Action.TIRERGAUCHE) {
-	        	if (s.getWumpus().getPosition().getX() < s.getAventurier().getPosition().getX()) {
+	        	if (positionWumpus.getX() < positionAgent.getX()) {
                     s2.setMortWumpus(true);
                 }
-	        	return Observation.newObservation(s2.getAventurier().getPosition(), s2);
+	        	for (Coordonnees c : whereIsWumpus) {
+        			if (c.getX() == agent.getPosition().getX())
+        				whereIsWumpus.remove(c);
+        		}
+	        	return Observation.newObservation(positionAgent, s2);
 	        }
         }
     	
     	return null;
+    }
+    
+    public boolean isResolvable(State initState) {
+    	Coordonnees positionOr = initState.getOr();
+    	Coordonnees[] positionsPuits = initState.getPuits();
+    	if (positionOr.getX() == 0 || positionOr.getX() == 3)
+			if (positionOr.getY() == 0 || positionOr.getY() == 3)
+				if (positionOr.isVoisin(positionsPuits[0]) && positionOr.isVoisin(positionsPuits[1]))
+					return false;
+    	Coordonnees positionAgent = initState.getAventurier().getPosition();
+    	if (positionAgent.getX() == 0 || positionAgent.getX() == 3)
+			if (positionAgent.getY() == 0 || positionAgent.getY() == 3)
+				if (positionAgent.isVoisin(positionsPuits[0]) && positionAgent.isVoisin(positionsPuits[1]))
+					return false;
+    	return true;
     }
 }

@@ -20,10 +20,9 @@ public class Algo {
         State copy = a.problem.transition(initState, Action.ALLERBAS);
         System.out.println(initState.toString());
         System.out.println(copy.toString());
-    }
-    
-    public void solution(State s) {
-    	
+        Coordonnees c = new Coordonnees(1, 2);
+        Coordonnees c1 = new Coordonnees(c);
+        System.out.println(c.equals(c1));
     }
 
 
