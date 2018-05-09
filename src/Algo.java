@@ -17,16 +17,21 @@ public class Algo {
         Observation o = Observation.newObservation(initState.getAventurier().getPosition(), initState);
         System.out.println(o.toString());
         initState.getAventurier().setObservation(o);
-        State newState = a.problem.transition(initState,a.nextAction(initState));
+        Action action = a.nextAction(initState);
+        State oldState = initState;
+        State newState = a.problem.transition(initState, action);
+        o = a.problem.observation(initState, action, newState.getAventurier());
         System.out.println(newState.toString());
         int i = 0;
         boolean gameOver = newState.getAventurier().getPosition().equals(newState.getWumpus().getPosition());
         boolean win = newState.getOr().equals(newState.getAventurier().getPosition());
         while (!win && !gameOver && i < 100) {
-        	o = Observation.newObservation(initState.getAventurier().getPosition(), initState);
+        	o = a.problem.observation(oldState, action, newState.getAventurier());
         	System.out.println(o.toString());
         	newState.getAventurier().setObservation(o);
-            newState = a.problem.transition(newState,a.nextAction(newState));
+        	action = a.nextAction(newState);
+        	oldState = newState;
+            newState = a.problem.transition(newState, action);
             System.out.println(newState.toString());
             win = newState.getOr().equals(newState.getAventurier().getPosition());
             gameOver = newState.getAventurier().getPosition().equals(newState.getWumpus().getPosition());
@@ -42,7 +47,7 @@ public class Algo {
     }
 
     public Action nextAction(State s) {
-        // d�finition variables utiles      
+        // definition variables utiles      
         Agent agent = s.getAventurier();
         Coordonnees positionAgent = s.getAventurier().getPosition(); 
         
