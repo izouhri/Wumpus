@@ -1,6 +1,4 @@
 import java.util.ArrayList;
-import java.util.PriorityQueue;
-import java.util.Queue;
 
 public class Algo {
 
@@ -13,21 +11,31 @@ public class Algo {
 	public static void main(String[] args) {
     	Algo a = new Algo(new Problem());
         State initState = new State();
-        System.out.println(initState.toString());
-        
         Observation o = initState.getAventurier().getObservation(initState.getAventurier().getPosition());
-        System.out.println(o.toString());
-        State copy = a.problem.transition(initState, Action.ALLERBAS);
-        System.out.println(initState.toString());
-        System.out.println(copy.toString());
-        Coordonnees c = new Coordonnees(1, 2);
-        Coordonnees c1 = new Coordonnees(c);
-        System.out.println(c.equals(c1));
+        initState.getAventurier().setObservation(o);
+        State newState = a.problem.transition(initState,a.nextAction(initState));
+        int i = 0;
+        boolean gameOver = newState.getAventurier().getPosition().equals(newState.getWumpus().getPosition());
+        boolean win = newState.getOr().equals(newState.getAventurier().getPosition());
+        while (!win && !gameOver && i < 50) {
+            newState = a.problem.transition(newState,a.nextAction(newState));
+            o = newState.getAventurier().getObservation(newState.getAventurier().getPosition());
+            newState.getAventurier().setObservation(o);
+            win = newState.getOr().equals(newState.getAventurier().getPosition());
+            gameOver = newState.getAventurier().getPosition().equals(newState.getWumpus().getPosition());
+            i ++;
+        }
+        if (gameOver) {
+            System.out.print("Game Over");
+        }
+        else if (win) {
+            System.out.print("Bravo !");
+        }
+        else System.out.print("Game Impossible");
     }
 
-
     public Action nextAction(State s) {
-        // définition variables utiles      
+        // dï¿½finition variables utiles      
         Agent agent = s.getAventurier();
         Coordonnees positionAgent = s.getAventurier().getPosition(); 
         
