@@ -20,7 +20,6 @@ public class Algo {
         Action action = a.nextAction(initState);
         State oldState = initState;
         State newState = a.problem.transition(initState, action);
-        o = a.problem.observation(initState, action, newState.getAventurier());
         System.out.println(newState.toString());
         int i = 0;
         boolean gameOver = newState.getAventurier().getPosition().equals(newState.getWumpus().getPosition());
@@ -58,9 +57,9 @@ public class Algo {
         Coordonnees enbas = new Coordonnees(positionAgent);
         enbas.setY(positionAgent.getY() - 1);
         Coordonnees adroite = new Coordonnees(positionAgent);
-        adroite.setY(positionAgent.getX() + 1);
+        adroite.setX(positionAgent.getX() + 1);
         Coordonnees agauche = new Coordonnees(positionAgent);
-        agauche.setY(positionAgent.getX() - 1);
+        agauche.setX(positionAgent.getX() - 1);
         
         // suppositions de la position du wumpus
         boolean wumpusEnHaut = agent.getWhereIsWumpus().contains(enhaut);
@@ -141,9 +140,9 @@ public class Algo {
                 	}
                 }
         	}
-        	else
-        		return actionsNonPrio.get(0);
         }
+        if (actionsPrio.isEmpty()) // aucune autre solution que aller vers deja vu ou danger
+        	return actionsNonPrio.get(0);
         return actionsPrio.get(0);
     }
 

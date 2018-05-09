@@ -3,7 +3,7 @@ import java.util.ArrayList;
 public class Agent {
 	private Coordonnees position;
 	private boolean arrow;
-	private Observation[][] map = {{null, null, null, null},
+	public Observation[][] map = {{null, null, null, null},
 									{null, null, null, null},
 									{null, null, null, null},
 									{null, null, null, null}};
@@ -24,6 +24,7 @@ public class Agent {
 	public Agent(Agent agent) {
 		this.position = new Coordonnees(agent.getPosition());
 		this.arrow = agent.hasArrow();
+		this.map = (Observation[][])agent.map.clone();
 	}
 
 	//getters et setters

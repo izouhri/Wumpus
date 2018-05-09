@@ -45,35 +45,35 @@ public class Problem {
         return s2;
     }
     
-    public Observation observation(State s, Action a, Agent agent) {
+    public Observation observation(State oldState, Action a, Agent newStateAgent) {
 
-    	Coordonnees positionAgent = agent.getPosition();
+    	Coordonnees positionAgent = oldState.getAventurier().getPosition();
     	if (a == Action.ALLERHAUT) {
     		Coordonnees newPositionAgent = new Coordonnees(positionAgent.getX(), positionAgent.getY() + 1);
-            return Observation.newObservation(newPositionAgent, s);
+            return Observation.newObservation(newPositionAgent, oldState);
         }
         else if (a == Action.ALLERBAS) {
         	Coordonnees newPositionAgent = new Coordonnees(positionAgent.getX(), positionAgent.getY() - 1);
-            return Observation.newObservation(newPositionAgent, s);
+            return Observation.newObservation(newPositionAgent, oldState);
         }
         else if (a == Action.ALLERDROITE) {
         	Coordonnees newPositionAgent = new Coordonnees(positionAgent.getX()+ 1, positionAgent.getY() );
-            return Observation.newObservation(newPositionAgent, s);
+            return Observation.newObservation(newPositionAgent, oldState);
         }
         else if (a == Action.ALLERGAUCHE) {
         	Coordonnees newPositionAgent = new Coordonnees(positionAgent.getX() -1, positionAgent.getY() );
-            return Observation.newObservation(newPositionAgent, s);
+            return Observation.newObservation(newPositionAgent, oldState);
         }
         else {
-        	State s2 = new State(s);
-        	Coordonnees positionWumpus = s.getWumpus().getPosition();
-        	ArrayList<Coordonnees> whereIsWumpus = agent.getWhereIsWumpus();
+        	State s2 = new State(oldState);
+        	Coordonnees positionWumpus = oldState.getWumpus().getPosition();
+        	ArrayList<Coordonnees> whereIsWumpus = oldState.getAventurier().getWhereIsWumpus();
         	if (a == Action.TIRERHAUT) {
         		if (positionWumpus.getY() > positionAgent.getY()) {
                     s2.setMortWumpus(true);
                 }
-        		for (Coordonnees c : whereIsWumpus) {
-        			if (c.getY() == agent.getPosition().getY())
+        		for (Coordonnees c : whereIsWumpus) { // mise a jour des connaissance de l'agent sur la position du wumpus (dans le cas ou le tire de fleche permet une deduction)
+        			if (c.getY() == newStateAgent.getPosition().getY())
         				whereIsWumpus.remove(c);
         		}
                 return Observation.newObservation(positionAgent, s2);
@@ -84,7 +84,7 @@ public class Problem {
                     s2.setMortWumpus(true);
                 }
 	        	for (Coordonnees c : whereIsWumpus) {
-        			if (c.getY() == agent.getPosition().getY())
+        			if (c.getY() == newStateAgent.getPosition().getY())
         				whereIsWumpus.remove(c);
         		}
 	        	return Observation.newObservation(positionAgent, s2);
@@ -95,7 +95,7 @@ public class Problem {
                     s2.setMortWumpus(true);
                 }
 	        	for (Coordonnees c : whereIsWumpus) {
-        			if (c.getX() == agent.getPosition().getX())
+        			if (c.getX() == newStateAgent.getPosition().getX())
         				whereIsWumpus.remove(c);
         		}
 	        	return Observation.newObservation(positionAgent, s2);
@@ -106,7 +106,7 @@ public class Problem {
                     s2.setMortWumpus(true);
                 }
 	        	for (Coordonnees c : whereIsWumpus) {
-        			if (c.getX() == agent.getPosition().getX())
+        			if (c.getX() == newStateAgent.getPosition().getX())
         				whereIsWumpus.remove(c);
         		}
 	        	return Observation.newObservation(positionAgent, s2);
