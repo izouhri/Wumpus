@@ -20,6 +20,11 @@ public class Agent {
 		this.arrow = true;
 	}
 	
+	public Agent(int x, int y){
+		this.position = new Coordonnees(x, y);
+		this.arrow = true;
+	}
+	
 	//constructeur par copie
 	public Agent(Agent agent) {
 		this.position = new Coordonnees(agent.getPosition());
@@ -80,7 +85,7 @@ public class Agent {
 
 	public void trouverWumpus(Coordonnees odeur) {
 		if (wumpusPosition == null) {
-			trouverAttribut(odeur, whereIsWumpus);
+			whereIsWumpus = trouverAttribut(odeur, whereIsWumpus);
 			if (whereIsWumpus.contains(puitUPosition))
 				whereIsWumpus.remove(puitUPosition);
 			if (whereIsWumpus.contains(puitDPosition))
@@ -112,7 +117,7 @@ public class Agent {
 				if (puitD)
 					trouverPuitD(air);
 				else
-					trouverAttribut(air, whereIsPuitU);
+					whereIsPuitU = trouverAttribut(air, whereIsPuitU);
 			}
 			if (whereIsPuitU.contains(wumpusPosition))
 				whereIsPuitU.remove(wumpusPosition);
@@ -135,7 +140,7 @@ public class Agent {
 	
 	public void trouverPuitD(Coordonnees air) {
 		if (puitDPosition == null) {
-			trouverAttribut(air, whereIsPuitD);
+			whereIsPuitD = trouverAttribut(air, whereIsPuitD);
 			if (whereIsPuitD.contains(wumpusPosition))
 				whereIsPuitD.remove(wumpusPosition);
 			if (whereIsPuitD.contains(puitUPosition))
@@ -168,8 +173,8 @@ public class Agent {
 	}
 
 	// ajoute des positions possibles en fonction de l'indice
-	private void trouverAttribut(Coordonnees indice, ArrayList<Coordonnees> suppositions) {
-		if (!suppositions.isEmpty()) {
+	private ArrayList<Coordonnees> trouverAttribut(Coordonnees indice, ArrayList<Coordonnees> suppositions) {
+		if (suppositions.isEmpty()) {
 			if (indice.getX() < 3)
 				suppositions.add(new Coordonnees(indice.getX() + 1, indice.getY()));
 			if (indice.getX() > 0)
@@ -182,5 +187,6 @@ public class Agent {
 		for (Coordonnees c : suppositions)
 			if (!c.isVoisin(indice))
 				suppositions.remove(c);
+		return suppositions;
 	}
 }

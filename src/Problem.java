@@ -72,9 +72,12 @@ public class Problem {
         		if (positionWumpus.getY() > positionAgent.getY()) {
                     s2.setMortWumpus(true);
                 }
-        		for (Coordonnees c : whereIsWumpus) { // mise a jour des connaissance de l'agent sur la position du wumpus (dans le cas ou le tire de fleche permet une deduction)
-        			if (c.getY() == newStateAgent.getPosition().getY())
-        				whereIsWumpus.remove(c);
+        		int i = 0;
+        		while (i < whereIsWumpus.size()) {// mise a jour des connaissance de l'agent sur la position du wumpus (dans le cas ou le tire de fleche permet une deduction)
+        			Coordonnees supposition = whereIsWumpus.get(i);
+        			if (supposition.getY() == newStateAgent.getPosition().getY())
+        				whereIsWumpus.remove(supposition);
+        			i++;
         		}
                 return Observation.newObservation(positionAgent, s2);
 	        }

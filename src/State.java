@@ -13,8 +13,6 @@ public class State {
         this.wumpus = wumpus;
         this.or = or;
         this.aventurier = aventurier;
-        
-    	this.aventurier.setObservation(Observation.newObservation(this.aventurier.getPosition(), this));
     }
 
     // constructeur pour generer un etat initial aleatoire

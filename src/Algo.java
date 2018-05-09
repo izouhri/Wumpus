@@ -10,32 +10,36 @@ public class Algo {
 
 	public static void main(String[] args) {
     	Algo a = new Algo(new Problem());
-        State initState = new State();
-        while (!a.problem.isResolvable(initState))
-        	initState = new State();
+        State initState = new State(new Agent(3, 2), new Wumpus(2, 2), new Coordonnees(0, 1), new Coordonnees(1, 3), new Coordonnees(1, 1));
+        //while (!a.problem.isResolvable(initState))
+        //	initState = new State();
         System.out.println(initState.toString());
         Observation o = Observation.newObservation(initState.getAventurier().getPosition(), initState);
         System.out.println(o.toString());
         initState.getAventurier().setObservation(o);
         Action action = a.nextAction(initState);
+        System.out.println(action);
         State oldState = initState;
         State newState = a.problem.transition(initState, action);
         System.out.println(newState.toString());
         int i = 0;
-        boolean gameOver = newState.getAventurier().getPosition().equals(newState.getWumpus().getPosition());
+        boolean gameOver = newState.getAventurier().getPosition().equals(newState.getWumpus().getPosition())
+                			|| newState.getAventurier().getPosition().equals(newState.getPuits()[0])
+                			|| newState.getAventurier().getPosition().equals(newState.getPuits()[1]);
         boolean win = newState.getOr().equals(newState.getAventurier().getPosition());
         while (!win && !gameOver && i < 100) {
         	o = a.problem.observation(oldState, action, newState.getAventurier());
         	System.out.println(o.toString());
         	newState.getAventurier().setObservation(o);
         	action = a.nextAction(newState);
+        	System.out.println(action);
         	oldState = newState;
             newState = a.problem.transition(newState, action);
             System.out.println(newState.toString());
             win = newState.getOr().equals(newState.getAventurier().getPosition());
             gameOver = newState.getAventurier().getPosition().equals(newState.getWumpus().getPosition())
-                    || newState.getAventurier().getPosition().equals(newState.getPuits()[0])
-                    || newState.getAventurier().getPosition().equals(newState.getPuits()[1]);
+                    	|| newState.getAventurier().getPosition().equals(newState.getPuits()[0])
+                    	|| newState.getAventurier().getPosition().equals(newState.getPuits()[1]);
             i ++;
         }
         if (gameOver) {

@@ -8,6 +8,11 @@ public class Wumpus {
         this.mort = false;
     }
     
+    public Wumpus(int x, int y){
+		this.position = new Coordonnees(x, y);
+		this.mort = false;
+	}
+    
     public Wumpus(Wumpus wumpus) {
 		this.position = new Coordonnees(wumpus.getPosition());
 		this.mort = wumpus.isMort();
