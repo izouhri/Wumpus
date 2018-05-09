@@ -2,7 +2,7 @@ import java.util.ArrayList;
 
 public class Algo {
 
-	Problem problem;
+	public Problem problem;
 	
     public Algo(Problem p) {
 		this.problem = p;
@@ -11,16 +11,23 @@ public class Algo {
 	public static void main(String[] args) {
     	Algo a = new Algo(new Problem());
         State initState = new State();
-        Observation o = initState.getAventurier().getObservation(initState.getAventurier().getPosition());
+        while (!a.problem.isResolvable(initState))
+        	initState = new State();
+        System.out.println(initState.toString());
+        Observation o = Observation.newObservation(initState.getAventurier().getPosition(), initState);
+        System.out.println(o.toString());
         initState.getAventurier().setObservation(o);
         State newState = a.problem.transition(initState,a.nextAction(initState));
+        System.out.println(newState.toString());
         int i = 0;
         boolean gameOver = newState.getAventurier().getPosition().equals(newState.getWumpus().getPosition());
         boolean win = newState.getOr().equals(newState.getAventurier().getPosition());
-        while (!win && !gameOver && i < 50) {
+        while (!win && !gameOver && i < 100) {
+        	o = Observation.newObservation(initState.getAventurier().getPosition(), initState);
+        	System.out.println(o.toString());
+        	newState.getAventurier().setObservation(o);
             newState = a.problem.transition(newState,a.nextAction(newState));
-            o = newState.getAventurier().getObservation(newState.getAventurier().getPosition());
-            newState.getAventurier().setObservation(o);
+            System.out.println(newState.toString());
             win = newState.getOr().equals(newState.getAventurier().getPosition());
             gameOver = newState.getAventurier().getPosition().equals(newState.getWumpus().getPosition());
             i ++;
@@ -67,7 +74,7 @@ public class Algo {
         // Decision pour les actions
         ArrayList<Action> actionsPrio = new ArrayList<Action>();
         ArrayList<Action> actionsNonPrio = new ArrayList<Action>();
-        if (positionAgent.getY() < 4)
+        if (positionAgent.getY() < 3)
         {
             if (agent.getObservation(enhaut) == null && !wumpusEnHaut && !puitHaut)
                 actionsPrio.add(Action.ALLERHAUT);
@@ -81,7 +88,7 @@ public class Algo {
             else
             	actionsNonPrio.add(Action.ALLERBAS);
         }
-        if (positionAgent.getX() < 4)
+        if (positionAgent.getX() < 3)
         {
             if (agent.getObservation(adroite) == null && !wumpusAdroite && !puisDroite)
                 actionsPrio.add(Action.ALLERDROITE);
