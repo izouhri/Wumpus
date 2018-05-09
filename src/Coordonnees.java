@@ -29,8 +29,10 @@ public class Coordonnees {
         this.y = newY;
     }
     
-    public boolean isEqual(Coordonnees c)
+    @Override
+    public boolean equals(Object coordonnees)
     {
+    	Coordonnees c = (Coordonnees) coordonnees;
     	if (c == null)
     		return false;
     	return c.getX() == this.x && c.getY() == this.y;
