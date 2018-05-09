@@ -34,7 +34,9 @@ public class Algo {
             newState = a.problem.transition(newState, action);
             System.out.println(newState.toString());
             win = newState.getOr().equals(newState.getAventurier().getPosition());
-            gameOver = newState.getAventurier().getPosition().equals(newState.getWumpus().getPosition());
+            gameOver = newState.getAventurier().getPosition().equals(newState.getWumpus().getPosition())
+                    || newState.getAventurier().getPosition().equals(newState.getPuits()[0])
+                    || newState.getAventurier().getPosition().equals(newState.getPuits()[1]);
             i ++;
         }
         if (gameOver) {
