@@ -21,34 +21,55 @@ public class Algo {
 
 
     public Action nextMove(State s, Problem p) {
-        Queue<Action> actions = new PriorityQueue<Action>();
-        if (!s.getAventurier().getWhereIsWumpus().contains(p.transition(s,Action.ALLERHAUT).getAventurier().getPosition())){
-            if (s.getAventurier().getObservation((p.transition(s,Action.ALLERHAUT).getAventurier().getPosition())) == null){
-                actions.add(Action.ALLERHAUT); //mettre en priorité
-            }
-            // else Mettre allzeHaut pas priorité
+        ArrayList<Action> actionsPrio = new ArrayList<Action>();
+        ArrayList<Action> actionsNonPrio = new ArrayList<Action>();
+        if (!s.getAventurier().getWhereIsWumpus().contains(p.transition(s, Action.ALLERHAUT).getAventurier().getPosition())
+                && !s.getAventurier().getWhereIsPuitU().contains(p.transition(s, Action.ALLERHAUT).getAventurier().getPosition())
+                && !s.getAventurier().getWhereIsPuitD().contains(p.transition(s, Action.ALLERHAUT).getAventurier().getPosition())
+                && !s.getAventurier().getPosition().isEqual(p.transition(s, Action.ALLERHAUT).getAventurier().getPosition())) {
+            if (s.getAventurier().getObservation((p.transition(s, Action.ALLERHAUT).getAventurier().getPosition())) == null) {
+                actionsPrio.add(Action.ALLERHAUT);
+            } else actionsNonPrio.add(Action.ALLERHAUT);
+        } else if (s.getAventurier().hasArrow()
+                && s.getAventurier().getWhereIsWumpus().contains(p.transition(s, Action.ALLERHAUT).getAventurier().getPosition())) {
+            actionsPrio.add(Action.TIRERHAUT);
         }
-        if (!s.getAventurier().getWhereIsWumpus().contains(p.transition(s,Action.ALLERBAS).getAventurier().getPosition())){
-            if (s.getAventurier().getObservation((p.transition(s,Action.ALLERBAS).getAventurier().getPosition())) == null){
-                actions.add(Action.ALLERBAS);
-            }
-            // else pas en priorité actions.add(Action.ALLERBAS);
+        if (!s.getAventurier().getWhereIsWumpus().contains(p.transition(s, Action.ALLERBAS).getAventurier().getPosition())
+                && !s.getAventurier().getWhereIsPuitU().contains(p.transition(s, Action.ALLERBAS).getAventurier().getPosition())
+                && !s.getAventurier().getWhereIsPuitD().contains(p.transition(s, Action.ALLERBAS).getAventurier().getPosition())
+                && !s.getAventurier().getPosition().isEqual(p.transition(s, Action.ALLERBAS).getAventurier().getPosition())) {
+            if (s.getAventurier().getObservation((p.transition(s, Action.ALLERBAS).getAventurier().getPosition())) == null) {
+                actionsPrio.add(Action.ALLERBAS);
+            } else actionsNonPrio.add(Action.ALLERBAS);
+        } else if (s.getAventurier().hasArrow()
+                && s.getAventurier().getWhereIsWumpus().contains(p.transition(s, Action.ALLERBAS).getAventurier().getPosition())) {
+            actionsPrio.add(Action.TIRERBAS);
         }
-        if (!s.getAventurier().getWhereIsWumpus().contains(p.transition(s,Action.ALLERDROITE).getAventurier().getPosition())){
-            if (s.getAventurier().getObservation((p.transition(s,Action.ALLERDROITE).getAventurier().getPosition())) == null){
-                actions.add(Action.ALLERDROITE);
-            }
-            //else pas priorité actions.add(Action.ALLERDROITE);
+        if (!s.getAventurier().getWhereIsWumpus().contains(p.transition(s, Action.ALLERDROITE).getAventurier().getPosition())
+                && !s.getAventurier().getWhereIsPuitU().contains(p.transition(s, Action.ALLERDROITE).getAventurier().getPosition())
+                && !s.getAventurier().getWhereIsPuitD().contains(p.transition(s, Action.ALLERDROITE).getAventurier().getPosition())
+                && !s.getAventurier().getPosition().isEqual(p.transition(s, Action.ALLERDROITE).getAventurier().getPosition())) {
+            if (s.getAventurier().getObservation((p.transition(s, Action.ALLERDROITE).getAventurier().getPosition())) == null) {
+                actionsPrio.add(Action.ALLERDROITE);
+            } else actionsNonPrio.add(Action.ALLERDROITE);
+        } else if (s.getAventurier().hasArrow()
+                && s.getAventurier().getWhereIsWumpus().contains(p.transition(s, Action.ALLERDROITE).getAventurier().getPosition())) {
+            actionsPrio.add(Action.TIRERDROITE);
         }
-        if (!s.getAventurier().getWhereIsWumpus().contains(p.transition(s,Action.ALLERGAUCHE).getAventurier().getPosition())){
-            if (s.getAventurier().getObservation((p.transition(s,Action.ALLERGAUCHE).getAventurier().getPosition())) == null){
-                actions.add(Action.ALLERGAUCHE);
-            }
-            // pas en priorité actions.add(Action.ALLERGAUCHE);
+        if (!s.getAventurier().getWhereIsWumpus().contains(p.transition(s, Action.ALLERGAUCHE).getAventurier().getPosition())
+                && !s.getAventurier().getWhereIsPuitU().contains(p.transition(s, Action.ALLERGAUCHE).getAventurier().getPosition())
+                && !s.getAventurier().getWhereIsPuitD().contains(p.transition(s, Action.ALLERGAUCHE).getAventurier().getPosition())
+                && !s.getAventurier().getPosition().isEqual(p.transition(s, Action.ALLERGAUCHE).getAventurier().getPosition())) {
+            if (s.getAventurier().getObservation((p.transition(s, Action.ALLERGAUCHE).getAventurier().getPosition())) == null) {
+                actionsPrio.add(Action.ALLERGAUCHE);
+            } else actionsNonPrio.add(Action.ALLERGAUCHE);
+        } else if (s.getAventurier().hasArrow()
+                && s.getAventurier().getWhereIsWumpus().contains(p.transition(s, Action.ALLERGAUCHE).getAventurier().getPosition())) {
+            actionsPrio.add(Action.TIRERGAUCHE);
         }
-        // Si aucune priorité
-
     }
+
+
 
 
     
