@@ -26,6 +26,7 @@ public class Agent {
 	}
 	
 	//constructeur par copie
+	@SuppressWarnings("unchecked")
 	public Agent(Agent agent) {
 		this.position = new Coordonnees(agent.getPosition());
 		this.arrow = agent.hasArrow();
