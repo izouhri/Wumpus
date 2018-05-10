@@ -265,14 +265,4 @@ public class Algo {
     	}
     	return true;
     }
-<<<<<<< HEAD
-    
-    private Action agentModel(Observation o, Agent a) {
-    	a.setObservation(o);
-    	return null;
-    }
-    
-    
-=======
->>>>>>> 7cd79469ac153abd53d358ab7a6c00f86a8e075e
 }
