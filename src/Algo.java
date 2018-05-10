@@ -10,32 +10,31 @@ public class Algo {
 
 	public static void main(String[] args) {
     	Algo a = new Algo(new Problem());
-        State initState = new State(new Agent(3, 2), new Wumpus(2, 2), new Coordonnees(0, 1), new Coordonnees(1, 3), new Coordonnees(1, 1));
-        //while (!a.problem.isResolvable(initState))
-        //	initState = new State();
+        //State initState = new State(new Agent(1, 1), new Wumpus(3, 2), new Coordonnees(0, 3), new Coordonnees(2, 1), new Coordonnees(3, 3));
+    	State initState = new State();
+        while (!a.problem.isResolvable(initState))
+        	initState = new State();
         System.out.println(initState.toString());
         Observation o = Observation.newObservation(initState.getAventurier().getPosition(), initState);
         System.out.println(o.toString());
         initState.getAventurier().setObservation(o);
         Action action = a.nextAction(initState);
         System.out.println(action);
-        State oldState = initState;
-        State newState = a.problem.transition(initState, action);
-        System.out.println(newState.toString());
+        State state = a.problem.transition(initState, action);
+        System.out.println(state.toString());
         int i = 0;
-        boolean gameOver = a.gameOver(newState);
-        boolean win = newState.getOr().equals(newState.getAventurier().getPosition());
+        boolean gameOver = a.gameOver(state);
+        boolean win = state.getOr().equals(state.getAventurier().getPosition());
         while (!win && !gameOver && i < 100) {
-        	o = a.problem.observation(oldState, action, newState.getAventurier());
+        	o = a.problem.observation(state, action);
         	System.out.println(o.toString());
-        	newState.getAventurier().setObservation(o);
-        	action = a.nextAction(newState);
+        	state.getAventurier().setObservation(o);
+        	action = a.nextAction(state);
         	System.out.println(action);
-        	oldState = newState;
-            newState = a.problem.transition(newState, action);
-            System.out.println(newState.toString());
-            win = newState.getOr().equals(newState.getAventurier().getPosition());
-            gameOver = a.gameOver(newState);
+            state = a.problem.transition(state, action);
+            System.out.println(state.toString());
+            win = state.getOr().equals(state.getAventurier().getPosition());
+            gameOver = a.gameOver(state);
             i ++;
         }
         if (gameOver) {
@@ -96,10 +95,13 @@ public class Algo {
         // Decision pour les actions
         ArrayList<Action> actionsPrio = new ArrayList<Action>();
         ArrayList<Action> actionsNonPrio = new ArrayList<Action>();
+        ArrayList<Action> actionsDanger = new ArrayList<Action>();
         if (positionAgent.getY() < 3)
         {
             if (agent.getObservation(enhaut) == null && !wumpusEnHaut && !puitHaut)
                 actionsPrio.add(Action.ALLERHAUT);
+            else if (wumpusEnHaut || puitHaut)
+            	actionsDanger.add(Action.ALLERHAUT);
             else
             	actionsNonPrio.add(Action.ALLERHAUT);
         }
@@ -107,6 +109,8 @@ public class Algo {
         {
             if (agent.getObservation(enbas) == null && !wumpusEnBas && !puitBas)
                 actionsPrio.add(Action.ALLERBAS);
+            else if (wumpusEnBas || puitBas)
+            	actionsDanger.add(Action.ALLERBAS);
             else
             	actionsNonPrio.add(Action.ALLERBAS);
         }
@@ -114,6 +118,8 @@ public class Algo {
         {
             if (agent.getObservation(adroite) == null && !wumpusAdroite && !puisDroite)
                 actionsPrio.add(Action.ALLERDROITE);
+            else if (wumpusAdroite || puisDroite)
+            	actionsDanger.add(Action.ALLERDROITE);
             else
             	actionsNonPrio.add(Action.ALLERDROITE);
         }
@@ -121,44 +127,51 @@ public class Algo {
         {
             if (agent.getObservation(agauche) == null && !wumpusAgauche && !puisGauche)
                 actionsPrio.add(Action.ALLERGAUCHE);
+            else if (wumpusAgauche || puisGauche)
+            	actionsDanger.add(Action.ALLERGAUCHE);
             else
             	actionsNonPrio.add(Action.ALLERGAUCHE);
         }
-        if (actionsPrio.isEmpty()) {// lorsque preferable de tirer la fleche
-        	if (s.getAventurier().hasArrow()) {
-        		if (estEntoureWumpus(s, actionsNonPrio))
+        if (s.getAventurier().hasArrow()) { // lorsque peut etre preferable de tirer la fleche
+        	if (actionsPrio.isEmpty() && actionsNonPrio.isEmpty()) {
+        		if (estEntoureWumpus(s, actionsDanger))
                 {
-                    if (actionsNonPrio.contains(Action.ALLERHAUT))
+                    if (actionsDanger.contains(Action.ALLERHAUT))
                     	actionsPrio.add(Action.TIRERHAUT);
-                    if (actionsNonPrio.contains(Action.ALLERBAS))
+                    if (actionsDanger.contains(Action.ALLERBAS))
                     	actionsPrio.add(Action.TIRERBAS);
-                    if (actionsNonPrio.contains(Action.ALLERDROITE))
+                    if (actionsDanger.contains(Action.ALLERDROITE))
                     	actionsPrio.add(Action.TIRERDROITE);
-                    if (actionsNonPrio.contains(Action.ALLERGAUCHE))
+                    if (actionsDanger.contains(Action.ALLERGAUCHE))
                     	actionsPrio.add(Action.TIRERGAUCHE);
                 }
-                else if (agent.getWhereIsWumpus().size() == 2) {
-                	int i = 0;
-                	while (actionsPrio.isEmpty() && i < 2) {
-                		Coordonnees wumpusPosition = agent.getWhereIsWumpus().get(i);
-                		if (wumpusPosition.getX() == positionAgent.getX()) {
-        		            if (wumpusPosition.getY() > positionAgent.getY())
-        		            	actionsPrio.add(Action.TIRERHAUT);
-            		        else
-            		        	actionsPrio.add(Action.TIRERBAS);
-            		    }
-                		else if (wumpusPosition.getY() == positionAgent.getY()) {
-                			if (wumpusPosition.getX() > positionAgent.getX())
-                				actionsPrio.add(Action.TIRERDROITE);
-            		        else
-            		        	actionsPrio.add(Action.TIRERGAUCHE);
-                		}
-                	}
-                }
         	}
+	        else if (actionsPrio.isEmpty() && agent.getWhereIsWumpus().size() <= 2)
+	        {
+	        	int i = 0;
+	        	while (actionsPrio.isEmpty() && i < agent.getWhereIsWumpus().size())
+	        	{
+	        		Coordonnees wumpusPosition = agent.getWhereIsWumpus().get(i);
+	        		if (wumpusPosition.getX() == positionAgent.getX()) {
+			            if (wumpusPosition.getY() > positionAgent.getY())
+			            	actionsPrio.add(Action.TIRERHAUT);
+	    		        else
+	    		        	actionsPrio.add(Action.TIRERBAS);
+	    		    }
+	        		else if (wumpusPosition.getY() == positionAgent.getY()) {
+	        			if (wumpusPosition.getX() > positionAgent.getX())
+	        				actionsPrio.add(Action.TIRERDROITE);
+	    		        else
+	    		        	actionsPrio.add(Action.TIRERGAUCHE);
+	        		}
+	        	}
+	        }
         }
         if (actionsPrio.isEmpty()) // aucune autre solution que aller vers deja vu ou danger
-        	return actionsNonPrio.get(0);
+        	if (actionsNonPrio.isEmpty())
+        		return actionsDanger.get(0);
+        	else
+        		return actionsNonPrio.get(0);
         return actionsPrio.get(0);
     }
 

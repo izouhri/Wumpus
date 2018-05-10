@@ -30,6 +30,6 @@ public class Observation
 	}
 	
 	public String toString() {
-		return this.position.toString() + " : " + hasCourantAir() + ", " + hasOdeur();
+		return this.position.toString() + " Courant d'air : " + hasCourantAir() + ", Odeur : " + hasOdeur();
 	}
 }

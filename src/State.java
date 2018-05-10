@@ -90,6 +90,6 @@ public class State {
     }
     
     public String toString() {
-    	return "Position des elements :  Aventurier "+this.aventurier.getPosition().toString()+" 1er trou "+this.puits[0].toString()+" 2eme trou "+this.puits[1].toString()+" Or "+this.or.toString()+" Wumpus "+this.wumpus.getPosition().toString();
+    	return "Position des elements :  Aventurier "+this.aventurier.getPosition().toString()+" 1er trou "+this.puits[0].toString()+" 2eme trou "+this.puits[1].toString()+" Or "+this.or.toString()+" Wumpus "+this.wumpus.getPosition().toString() + " Wumpus mort ? " + this.wumpus.isMort();
     }
 }
