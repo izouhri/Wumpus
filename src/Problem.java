@@ -48,22 +48,48 @@ public class Problem {
     public Observation observation(State s, Action a) {
     	Coordonnees positionAgent = s.getAventurier().getPosition();
     	ArrayList<Coordonnees> whereIsWumpus = s.getAventurier().getWhereIsWumpus();
-    	if (a == Action.TIRERHAUT || a == Action.TIRERBAS) {
+    	if (a == Action.TIRERHAUT) {
     		int i = 0;
     		while (i < whereIsWumpus.size()) {// mise a jour des connaissance de l'agent sur la position du wumpus (dans le cas ou le tire de fleche permet une deduction)
     			Coordonnees supposition = whereIsWumpus.get(i);
-    			if (supposition.getX() == positionAgent.getX())
+    			if (supposition.getX() == positionAgent.getX()
+    					&& supposition.getY() > positionAgent.getY())
     				whereIsWumpus.remove(supposition);
     			else
     				i++;
     		}
             return Observation.newObservation(positionAgent, s);
         }
-        else if (a == Action.TIRERDROITE || a == Action.TIRERGAUCHE) {
+    	else if (a == Action.TIRERBAS) {
+    		int i = 0;
+    		while (i < whereIsWumpus.size()) {// mise a jour des connaissance de l'agent sur la position du wumpus (dans le cas ou le tire de fleche permet une deduction)
+    			Coordonnees supposition = whereIsWumpus.get(i);
+    			if (supposition.getX() == positionAgent.getX()
+    					&& supposition.getY() < positionAgent.getY())
+    				whereIsWumpus.remove(supposition);
+    			else
+    				i++;
+    		}
+            return Observation.newObservation(positionAgent, s);
+        }
+        else if (a == Action.TIRERDROITE) {
         	int i = 0;
     		while (i < whereIsWumpus.size()) {
     			Coordonnees supposition = whereIsWumpus.get(i);
-    			if (supposition.getY() == positionAgent.getY())
+    			if (supposition.getY() == positionAgent.getY()
+    					&& supposition.getX() > positionAgent.getX())
+    				whereIsWumpus.remove(supposition);
+    			else
+    				i++;
+    		}
+        	return Observation.newObservation(positionAgent, s);
+        }
+        else if (a == Action.TIRERGAUCHE) {
+        	int i = 0;
+    		while (i < whereIsWumpus.size()) {
+    			Coordonnees supposition = whereIsWumpus.get(i);
+    			if (supposition.getY() == positionAgent.getY()
+    					&& supposition.getX() < positionAgent.getX())
     				whereIsWumpus.remove(supposition);
     			else
     				i++;

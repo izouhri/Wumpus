@@ -45,6 +45,30 @@ public class Coordonnees {
     	return c.getX() == this.x && (c.getY() - 1 == this.y || c.getY() + 1 == this.y)
     			|| c.getY() == this.y && (c.getX() - 1 == this.x || c.getX() + 1 == this.x);
     }
+    
+    public boolean closer(Coordonnees rival, Coordonnees goal) {
+		int distanceX = this.x - goal.getX();
+		if (distanceX < 0)
+			distanceX *= -1;
+		int rivalDistanceX = rival.getX() - goal.getX();
+		if (rivalDistanceX < 0)
+			rivalDistanceX *= -1;
+		int distanceY = this.y - goal.getY();
+		if (distanceY < 0)
+			distanceY *= -1;
+		int rivalDistanceY = rival.getY() - goal.getY();
+		if (rivalDistanceY < 0)
+			rivalDistanceY *= -1;    
+		if ((distanceX == rivalDistanceX && distanceY < rivalDistanceY)
+				|| (distanceY == rivalDistanceY && distanceX < rivalDistanceX))
+		{
+			return true;
+		}
+		else if (distanceX + distanceY < rivalDistanceX + rivalDistanceY)
+			return true;
+
+		return false;
+	}
 
     public String toString(){
         return "("+this.x+";"+this.y+")";

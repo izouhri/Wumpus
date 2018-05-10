@@ -1,5 +1,7 @@
 import java.util.ArrayList;
 
+import com.sun.xml.internal.ws.addressing.model.ActionNotSupportedException;
+
 public class Algo {
 
 	public Problem problem;
@@ -10,7 +12,7 @@ public class Algo {
 
 	public static void main(String[] args) {
     	Algo a = new Algo(new Problem());
-        //State initState = new State(new Agent(1, 1), new Wumpus(3, 2), new Coordonnees(0, 3), new Coordonnees(2, 1), new Coordonnees(3, 3));
+        //State initState = new State(new Agent(2, 0), new Wumpus(1, 0), new Coordonnees(3, 3), new Coordonnees(0, 2), new Coordonnees(3, 0));
     	State initState = new State();
         while (!a.problem.isResolvable(initState))
         	initState = new State();
@@ -29,6 +31,7 @@ public class Algo {
         	o = a.problem.observation(state, action);
         	System.out.println(o.toString());
         	state.getAventurier().setObservation(o);
+        	a.actualiserMemoireCoups(action);
         	action = a.nextAction(state);
         	System.out.println(action);
             state = a.problem.transition(state, action);
@@ -41,7 +44,7 @@ public class Algo {
             System.out.print("Game Over");
         }
         else if (win) {
-            System.out.print("Bravo !");
+            System.out.print("Bravo ! Problème résolu en " + i + " coups.");
         }
         else System.out.print("Game Impossible");
     }
@@ -62,6 +65,17 @@ public class Algo {
 		return false;
 	}
 
+	Action lastAction = null;
+	Action actionTwoTimesAgo = null;
+	Action actionThreeTimesAgo = null;
+	Action actionFourTimesAgo = null;
+	public void actualiserMemoireCoups(Action action) {
+		actionFourTimesAgo = actionThreeTimesAgo;
+		actionThreeTimesAgo = actionTwoTimesAgo;
+		actionTwoTimesAgo = lastAction;
+		lastAction = action;
+	}
+	
     public Action nextAction(State s) {
         // definition variables utiles      
         Agent agent = s.getAventurier();
@@ -105,6 +119,15 @@ public class Algo {
             else
             	actionsNonPrio.add(Action.ALLERHAUT);
         }
+        if (positionAgent.getX() > 0)
+        {
+            if (agent.getObservation(agauche) == null && !wumpusAgauche && !puisGauche)
+                actionsPrio.add(Action.ALLERGAUCHE);
+            else if (wumpusAgauche || puisGauche)
+            	actionsDanger.add(Action.ALLERGAUCHE);
+            else
+            	actionsNonPrio.add(Action.ALLERGAUCHE);
+        }
         if (positionAgent.getY() > 0)
         {
             if (agent.getObservation(enbas) == null && !wumpusEnBas && !puitBas)
@@ -122,15 +145,6 @@ public class Algo {
             	actionsDanger.add(Action.ALLERDROITE);
             else
             	actionsNonPrio.add(Action.ALLERDROITE);
-        }
-        if (positionAgent.getX() > 0)
-        {
-            if (agent.getObservation(agauche) == null && !wumpusAgauche && !puisGauche)
-                actionsPrio.add(Action.ALLERGAUCHE);
-            else if (wumpusAgauche || puisGauche)
-            	actionsDanger.add(Action.ALLERGAUCHE);
-            else
-            	actionsNonPrio.add(Action.ALLERGAUCHE);
         }
         if (s.getAventurier().hasArrow()) { // lorsque peut etre preferable de tirer la fleche
         	if (actionsPrio.isEmpty() && actionsNonPrio.isEmpty()) {
@@ -168,12 +182,79 @@ public class Algo {
 	        }
         }
         if (actionsPrio.isEmpty()) // aucune autre solution que aller vers deja vu ou danger
-        	if (actionsNonPrio.isEmpty())
+        	if (agent.wumpusPosition != null
+	    		&& agent.puitUPosition != null
+	    		&& agent.puitDPosition != null)
+		    {
+		    	return trouverOr(s, actionsNonPrio);
+		    }
+        	else if (actionsNonPrio.isEmpty()
+    			|| (actionsNonPrio.get(0) == actionFourTimesAgo && !actionsDanger.isEmpty()))
+        	{
         		return actionsDanger.get(0);
-        	else
-        		return actionsNonPrio.get(0);
+        	}
+        	else {
+        		if (lastAction == Action.ALLERHAUT && actionsNonPrio.contains(Action.ALLERHAUT))
+        			return Action.ALLERHAUT;
+        		else if (lastAction == Action.ALLERHAUT && actionsNonPrio.contains(Action.ALLERGAUCHE))
+        			return Action.ALLERGAUCHE;
+        		else if (lastAction == Action.ALLERHAUT && actionsNonPrio.contains(Action.ALLERDROITE))
+        			return Action.ALLERDROITE;
+        		if (lastAction == Action.ALLERGAUCHE && actionsNonPrio.contains(Action.ALLERGAUCHE))
+        			return Action.ALLERGAUCHE;
+        		else if (lastAction == Action.ALLERGAUCHE && actionsNonPrio.contains(Action.ALLERBAS))
+        			return Action.ALLERBAS;
+        		else if (lastAction == Action.ALLERGAUCHE && actionsNonPrio.contains(Action.ALLERHAUT))
+        			return Action.ALLERHAUT;
+        		if (lastAction == Action.ALLERBAS && actionsNonPrio.contains(Action.ALLERBAS))
+        			return Action.ALLERBAS;
+        		else if (lastAction == Action.ALLERBAS && actionsNonPrio.contains(Action.ALLERDROITE))
+        			return Action.ALLERDROITE;
+        		else if (lastAction == Action.ALLERBAS && actionsNonPrio.contains(Action.ALLERGAUCHE))
+        			return Action.ALLERGAUCHE;
+        		if (lastAction == Action.ALLERDROITE && actionsNonPrio.contains(Action.ALLERDROITE))
+        			return Action.ALLERDROITE;
+        		else if (lastAction == Action.ALLERDROITE && actionsNonPrio.contains(Action.ALLERHAUT))
+        			return Action.ALLERHAUT;
+        		else if (lastAction == Action.ALLERDROITE && actionsNonPrio.contains(Action.ALLERBAS))
+        			return Action.ALLERBAS;
+        		
+    			return actionsNonPrio.get(0);
+        	}
+        
+        if (actionsPrio.contains(lastAction))
+        	return lastAction;
         return actionsPrio.get(0);
     }
+
+    private Action trouverOr(State s, ArrayList<Action> possibleMoves) {
+		Agent a = s.getAventurier();
+		Coordonnees unexplored = null;
+		int x = 0;
+		int y = 0;
+		while (unexplored == null)
+		{
+			Observation o = a.getObservation(x, y);
+			if (o == null)
+				unexplored = new Coordonnees (x, y);
+			x++;
+			if (x == 4) {
+				x = 0;
+				y++;
+			}
+		}
+		Coordonnees bestGoal = a.getPosition();
+		Action bestMove = possibleMoves.get(possibleMoves.size() - 1);
+		for (Action move : possibleMoves)
+    	{
+			Coordonnees goal = problem.transition(s, move).getAventurier().getPosition();
+			if (goal.closer(bestGoal, unexplored)) {
+				bestMove = move;
+				bestGoal = goal;
+			}
+    	}
+		return bestMove;
+	}
 
 	private boolean estEntoureWumpus(State s, ArrayList<Action> possibleMoves) {// Si les positions possibles du Wumpus (en fonction des connaissances de l'agent) entourent l'agent
     	for (Action move : possibleMoves)
@@ -184,6 +265,7 @@ public class Algo {
     	}
     	return true;
     }
+<<<<<<< HEAD
     
     private Action agentModel(Observation o, Agent a) {
     	a.setObservation(o);
@@ -191,4 +273,6 @@ public class Algo {
     }
     
     
+=======
+>>>>>>> 7cd79469ac153abd53d358ab7a6c00f86a8e075e
 }
